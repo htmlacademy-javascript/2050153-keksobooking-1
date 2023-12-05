@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Наталья Зиновьева](https://up.htmlacademy.ru/javascript-individual/1/user/2050153).
-* Наставник: `Неизвестно`.
+* Наставник: [Николай Колганов](https://htmlacademy.ru/profile/id794007).
 
 ---
 
