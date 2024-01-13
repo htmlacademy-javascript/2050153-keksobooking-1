@@ -116,9 +116,9 @@ const LOCATION_LAT_MAX = 35.70000;
 const LOCATION_LNG_MIN = 139.70000;
 const LOCATION_LNG_MAX = 139.80000;
 
-const OFFER_PRICE_MAX = 10000000;
+const OFFER_PRICE_MAX = 1000000;
 const OFFER_ROOMS_MAX = 10;
-const OFFER_GUESTS_MAX = 100;
+const OFFER_GUESTS_MAX = 30;
 const AVATAR_MIN_INDEX = 1;
 const AVATAR_MAX_INDEX = 10;
 
@@ -204,19 +204,22 @@ const checkout = () => {
   }
 };
 
+const locationLat = getRandomLocationInteger(LOCATION_LAT_MIN, LOCATION_LAT_MAX);
+const locationLng = getRandomLocationInteger(LOCATION_LNG_MIN, LOCATION_LNG_MAX);
+
 const createAuthor = () => ({
   avatarIndex: getAvatarIndex(),
   avatar: createAvatarAdress(),
 });
 
 const createLocation = () => ({
-  lat: getRandomLocationInteger(LOCATION_LAT_MIN, LOCATION_LAT_MAX),
-  lng: getRandomLocationInteger(LOCATION_LNG_MIN, LOCATION_LNG_MAX),
+  lat: locationLat,
+  lng: locationLng,
 });
 
 const createOffer = () => ({
   title: getRandomArrayElement(OFFER_TITLE),
-  address: `${ createLocation().lat }, ${ createLocation().lng }`,
+  address: `${ locationLat }, ${ locationLng }`,
   price: `${ createRandomRoundNumber(0, OFFER_PRICE_MAX)() } руб`,
   type: getRandomArrayElement(OFFER_TYPE),
   rooms: createRandomRoundNumber(0, OFFER_ROOMS_MAX)(),
@@ -228,6 +231,6 @@ const createOffer = () => ({
   photos: getArrayFromRandomElements(OFFER_PHOTOS),
 });
 
-console.log(createAuthor());
-console.log(createLocation());
-console.log(createOffer());
+createAuthor();
+createLocation();
+createOffer();
