@@ -121,37 +121,31 @@ const OFFER_ROOMS_MAX = 10;
 const OFFER_GUESTS_MAX = 30;
 const AVATAR_MIN_INDEX = 1;
 const AVATAR_MAX_INDEX = 10;
+const OBJECTS_LENGTH = 10;
+const LOCATION_DOT_FIXED = 5;
 
 let avatarIndex = 0;
 
 // получение случайного цисла из диапазона
-const getRandomRoundInteger = (a, b) => {
+const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 };
 
-// получение случайного цисла из диапазона для локации с плавающей точкой
-const getRandomLocationInteger = (a, b) => {
-  const lower = Math.min(a, b);
-  const upper = Math.max(a, b);
-  const result = Math.random() * (upper - lower) + lower;
-  return parseFloat(result.toFixed(5));
-};
-
 // генерирование случайного цисла из диапазона
-function createRandomRoundNumber (a, b) {
+function createRandomNumber (a, b) {
   const previousValues = [];
 
   return function () {
-    let currentValue = getRandomRoundInteger(a, b);
+    let currentValue = getRandomInteger(a, b);
     if (previousValues.length >= (b - a + 1)) {
       console.error(`Перебраны все числа из диапазона от ${ a } до ${ b }`);
       return null;
     }
     while (previousValues.includes(currentValue)) {
-      currentValue = getRandomRoundInteger(a, b);
+      currentValue = getRandomInteger(a, b);
     }
     previousValues.push(currentValue);
     return currentValue;
@@ -159,18 +153,37 @@ function createRandomRoundNumber (a, b) {
 }
 
 // получение случайного значения из массива
-const getRandomArrayElement = (elements) => elements[getRandomRoundInteger(0, elements.length - 1)];
+const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 // получение массива случайной длины из значений
 const getArrayFromRandomElements = (chosenArrey) => Array.from(
-  { length: getRandomRoundInteger(0, chosenArrey.length - 1) },
+  { length: getRandomInteger(0, chosenArrey.length - 1) },
   () => getRandomArrayElement(chosenArrey),
 ).join(', ');
+
+// получение случайного цисла из диапазона для локации с плавающей точкой, локации не повторяются
+const getRandomInRange = (from, to, dotFixed) => {
+  const previousValues = [];
+  // .toFixed() returns string, so ' * 1' is a trick to convert to number;
+  let rendomNumber = (Math.random() * (to - from) + from).toFixed(dotFixed) * 1;
+  if (rendomNumber < 0 || to < from) {
+    return NaN;
+  }
+  if (previousValues.length >= (to - from + 1)) {
+    console.error(`Перебраны все локации из диапазона от ${ from } до ${ to }`);
+    return null;
+  }
+  while (previousValues.includes(rendomNumber)) {
+    rendomNumber = (Math.random() * (to - from) + from).toFixed(dotFixed) * 1;
+  }
+  previousValues.push(rendomNumber);
+  return rendomNumber;
+};
 
 // получение рендомного числа от 1 до 10. Перед однозначными числами ставится 0.
 // Например, 01, 02...10.
 const getAvatarIndex = () => {
-  avatarIndex = getRandomRoundInteger(AVATAR_MIN_INDEX, AVATAR_MAX_INDEX);
+  avatarIndex = getRandomInteger(AVATAR_MIN_INDEX, AVATAR_MAX_INDEX);
   if (avatarIndex < AVATAR_MAX_INDEX) {
     const currentAvatarIndex = `0${ avatarIndex}`;
     avatarIndex = currentAvatarIndex;
@@ -204,26 +217,23 @@ const checkout = () => {
   }
 };
 
-const locationLat = getRandomLocationInteger(LOCATION_LAT_MIN, LOCATION_LAT_MAX);
-const locationLng = getRandomLocationInteger(LOCATION_LNG_MIN, LOCATION_LNG_MAX);
-
-const createAuthor = () => ({
+const getAuthor = () => ({
   avatarIndex: getAvatarIndex(),
   avatar: createAvatarAdress(),
 });
 
-const createLocation = () => ({
-  lat: locationLat,
-  lng: locationLng,
+const getLocation = (lat, lng) => ({
+  lat: lat,
+  lng: lng,
 });
 
-const createOffer = () => ({
+const getOffer = (lat, lng) => ({
   title: getRandomArrayElement(OFFER_TITLE),
-  address: `${ locationLat }, ${ locationLng }`,
-  price: `${ createRandomRoundNumber(0, OFFER_PRICE_MAX)() } руб`,
+  address: lat, lng,
+  price: `${ createRandomNumber(0, OFFER_PRICE_MAX)() } руб`,
   type: getRandomArrayElement(OFFER_TYPE),
-  rooms: createRandomRoundNumber(0, OFFER_ROOMS_MAX)(),
-  guests: createRandomRoundNumber(1, OFFER_GUESTS_MAX)(),
+  rooms: createRandomNumber(0, OFFER_ROOMS_MAX)(),
+  guests: createRandomNumber(1, OFFER_GUESTS_MAX)(),
   checkin: checkinTime,
   checkout: checkout(checkinTime),
   features: getArrayFromRandomElements(OFFER_FEATURES),
@@ -231,6 +241,19 @@ const createOffer = () => ({
   photos: getArrayFromRandomElements(OFFER_PHOTOS),
 });
 
-createAuthor();
-createLocation();
-createOffer();
+const createObject = (lat, lng) => {
+  lat = getRandomInRange(LOCATION_LAT_MIN, LOCATION_LAT_MAX, LOCATION_DOT_FIXED);
+  lng = getRandomInRange(LOCATION_LNG_MIN, LOCATION_LNG_MAX, LOCATION_DOT_FIXED);
+  return {
+    author: getAuthor(),
+    location: getLocation(lat, lng),
+    offer: getOffer(lat, lng)
+  };
+};
+
+const getObjects = () => Array.from(
+  { length: OBJECTS_LENGTH },
+  createObject
+);
+
+getObjects();
