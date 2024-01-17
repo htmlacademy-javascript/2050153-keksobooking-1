@@ -40,11 +40,11 @@ const isStringPalindromeSecondVersion = (checkedString) => {
   return true;
 };
 
-console.log(isStringPalindrome('топот'), isStringPalindromeSecondVersion('топот'));
-console.log(isStringPalindrome('ДовОд'), isStringPalindromeSecondVersion('ДовОд'));
-console.log(isStringPalindrome('Кекс'), isStringPalindromeSecondVersion('Flnt'));
-console.log(isStringPalindrome('Лёша на полке клопа нашёл '), isStringPalindromeSecondVersion('Лёша на полке клопа нашёл '));
-console.log(isStringPalindrome('0_0 (: /-\ :) 0–0'), isStringPalindromeSecondVersion('0_0 (: /-\ :) 0–0'));
+// console.log(isStringPalindrome('топот'), isStringPalindromeSecondVersion('топот'));
+// console.log(isStringPalindrome('ДовОд'), isStringPalindromeSecondVersion('ДовОд'));
+// console.log(isStringPalindrome('Кекс'), isStringPalindromeSecondVersion('Flnt'));
+// console.log(isStringPalindrome('Лёша на полке клопа нашёл '), isStringPalindromeSecondVersion('Лёша на полке клопа нашёл '));
+// console.log(isStringPalindrome('0_0 (: /-\ :) 0–0'), isStringPalindromeSecondVersion('0_0 (: /-\ :) 0–0'));
 
 
 // Функция, которая принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа.
@@ -68,14 +68,14 @@ const justNumbers = /[^0-9]/g;
 
 const extractNumbers = (checkedString) => parseInt(checkedString.toString().replace(justNumbers, ''), 10);
 
-console.log(extractNumbers('2023 год')); // 2023
-console.log(extractNumbers('ECMAScript 2022')); // 2022
-console.log(extractNumbers('1 кефир, 0.5 батона')); // 105
-console.log(extractNumbers('агент 007')); // 7
-console.log(extractNumbers('а я томат')); // NaN
-console.log(extractNumbers(2023)); // 2023
-console.log(extractNumbers(-1)); // 1
-console.log(extractNumbers(1.5)); // 15
+// console.log(extractNumbers('2023 год')); // 2023
+// console.log(extractNumbers('ECMAScript 2022')); // 2022
+// console.log(extractNumbers('1 кефир, 0.5 батона')); // 105
+// console.log(extractNumbers('агент 007')); // 7
+// console.log(extractNumbers('а я томат')); // NaN
+// console.log(extractNumbers(2023)); // 2023
+// console.log(extractNumbers(-1)); // 1
+// console.log(extractNumbers(1.5)); // 15
 
 // Функция, которая принимает три параметра: исходную строку, минимальную длину и строку с добавочными символами
 // — и возвращает исходную строку, дополненную указанными символами до заданной длины.
@@ -105,19 +105,19 @@ console.log(extractNumbers(1.5)); // 15
 
 const addSymbols = (regularString, minlength, addithionString) => regularString.padStart(minlength, addithionString);
 
-console.log(addSymbols('1', 2, '0')); // '01'
+// console.log(addSymbols('1', 2, '0')); // '01'
 
-// Добавочный символ использован три раза
-console.log(addSymbols('1', 4, '0')); // '0001'
+// // Добавочный символ использован три раза
+// console.log(addSymbols('1', 4, '0')); // '0001'
 
-// Добавочные символы обрезаны с конца
-console.log(addSymbols('q', 4, 'werty')); // 'werq'
+// // Добавочные символы обрезаны с конца
+// console.log(addSymbols('q', 4, 'werty')); // 'werq'
 
-// Добавочные символы использованы полтора раза
-console.log(addSymbols('q', 4, 'we')); // 'wewq'
+// // Добавочные символы использованы полтора раза
+// console.log(addSymbols('q', 4, 'we')); // 'wewq'
 
-// Добавочные символы не использованы, исходная строка не изменена
-console.log(addSymbols('qwerty', 4, '0')); // 'qwerty'
+// // Добавочные символы не использованы, исходная строка не изменена
+// console.log(addSymbols('qwerty', 4, '0')); // 'qwerty'
 
 // Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
 // Будет использоваться для генерации временных географических координат в следующем задании.
@@ -147,7 +147,7 @@ const getRandomInRange = (from, to, dotFixed) => {
   return rendomNumber;
 };
 
-console.log(getRandomInRange(-90,50,5)); // NaN or nn.nnnnn
-console.log(getRandomInRange(90,50,3)); // NaN
-console.log(getRandomInRange(90,150,4)); // nn/nnn.nnnn
-console.log(getRandomInRange(150,150,2)); // 150
+// console.log(getRandomInRange(-90,50,5)); // NaN or nn.nnnnn
+// console.log(getRandomInRange(90,50,3)); // NaN
+// console.log(getRandomInRange(90,150,4)); // nn/nnn.nnnn
+// console.log(getRandomInRange(150,150,2)); // 150
