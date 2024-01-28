@@ -13,9 +13,9 @@ const LOCATION_PRECISION = 5;
 const AVATAR_MIN_INDEX = 1;
 const AVATAR_MAX_INDEX = 10;
 
-const OFFER_PRICE_MAX = 1000000;
-const OFFER_ROOMS_MAX = 10;
-const OFFER_GUESTS_MAX = 30;
+const OFFER_PRICE_MAX = 100000;
+const OFFER_ROOMS_MAX = 4;
+const OFFER_GUESTS_MAX = 10;
 
 const OBJECTS_LENGTH = 10;
 
@@ -29,14 +29,16 @@ const OfferByType = {
 
 const OFFER = {
   [OfferByType.PALACE]: {
-    title: 'Aпартаменты посуточно',
+    type: 'Дворец',
+    title: 'Дворец посуточно',
     description: [
-      'Шикарные апартаменты в центре с видом на парк',
-      'Уютные апартаменты с видом на парк',
-      'Апартаменты с видом на озеро'
+      'Шикарный дворец в центре с видом на парк',
+      'Уютный дворец с видом на парк',
+      'Дворец с видом на озеро'
     ]
   },
   [OfferByType.FLAT]: {
+    type: 'Квартира',
     title: 'Квартира посуточно',
     description: [
       'Шикарная квартира в центре с видом на достопримечательности',
@@ -45,6 +47,7 @@ const OFFER = {
     ]
   },
   [OfferByType.HOUSE]: {
+    type: 'Дом',
     title: 'Уютный дом в аренду',
     description: [
       'Уютный, совремменный дом в элитном районе в окружении парка',
@@ -53,14 +56,16 @@ const OFFER = {
     ]
   },
   [OfferByType.BUNGALOW]: {
-    title: 'Уютный коттетж в аренду',
+    type: 'Бунгало',
+    title: 'Уютное бунгало в аренду',
     description: [
-      'Уютный, совремменный коттетж на склоне горы с шикарным видом на водопад',
-      'Cовремменный коттетж с шикарным видом на водопад',
-      'Уютный коттетж на склоне горы',
+      'Уютное, совремменное бунгало на склоне горы с шикарным видом на водопад',
+      'Cовремменное бунгало с шикарным видом на водопад',
+      'Уютное бунгало на склоне горы',
     ]
   },
   [OfferByType.HOTEL]: {
+    type: 'Отель',
     title: 'Номер в отеле',
     description: [
       'Уютный, совремменный отель прямо в центре города',
@@ -192,10 +197,9 @@ const getOffer = (lat, lng) => {
   const checkin = getRandomArrayElement(OFFER_CHECKIN_TIME);
   return {
     title: OFFER[type].title,
-    // eslint-disable-next-line
-    address: `${ lat }` + ', ' + `${ lng }`,
+    address: `${ lat }, ${ lng }`,
     price: `${ createRandomNumber(0, OFFER_PRICE_MAX)() } руб`,
-    type,
+    type: OFFER[type].type,
     rooms: createRandomNumber(0, OFFER_ROOMS_MAX)(),
     guests: createRandomNumber(1, OFFER_GUESTS_MAX)(),
     checkin,

@@ -1,4 +1,5 @@
 import './util.js';
 import { getObjects } from './data.js';
+import { renderCard } from './popup.js';
 
-getObjects();
+renderCard(getObjects());

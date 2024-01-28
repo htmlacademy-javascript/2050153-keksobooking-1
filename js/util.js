@@ -13,7 +13,7 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 const getArrayFromRandomElements = (chosenArrey) => Array.from(
   { length: getRandomInteger(0, chosenArrey.length - 1) },
   () => getRandomArrayElement(chosenArrey),
-).join(', ');
+);
 
 export {
   getRandomInteger,
