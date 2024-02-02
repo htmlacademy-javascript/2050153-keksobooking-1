@@ -19,5 +19,8 @@
   "scripts": {
     "start": "browser-sync start --server --no-ui --files \"js/**/*.js\"",
     "lint": "eslint js/"
+  },
+  "dependencies": {
+    "pluralize": "^8.0.0"
   }
 }

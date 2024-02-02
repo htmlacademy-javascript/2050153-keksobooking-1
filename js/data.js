@@ -29,7 +29,7 @@ const OfferByType = {
 
 const OFFER = {
   [OfferByType.PALACE]: {
-    type: 'Дворец',
+    typeTitle: 'Дворец',
     title: 'Дворец посуточно',
     description: [
       'Шикарный дворец в центре с видом на парк',
@@ -38,7 +38,7 @@ const OFFER = {
     ]
   },
   [OfferByType.FLAT]: {
-    type: 'Квартира',
+    typeTitle: 'Квартира',
     title: 'Квартира посуточно',
     description: [
       'Шикарная квартира в центре с видом на достопримечательности',
@@ -47,7 +47,7 @@ const OFFER = {
     ]
   },
   [OfferByType.HOUSE]: {
-    type: 'Дом',
+    typeTitle: 'Дом',
     title: 'Уютный дом в аренду',
     description: [
       'Уютный, совремменный дом в элитном районе в окружении парка',
@@ -56,7 +56,7 @@ const OFFER = {
     ]
   },
   [OfferByType.BUNGALOW]: {
-    type: 'Бунгало',
+    typeTitle: 'Бунгало',
     title: 'Уютное бунгало в аренду',
     description: [
       'Уютное, совремменное бунгало на склоне горы с шикарным видом на водопад',
@@ -65,7 +65,7 @@ const OFFER = {
     ]
   },
   [OfferByType.HOTEL]: {
-    type: 'Отель',
+    typeTitle: 'Отель',
     title: 'Номер в отеле',
     description: [
       'Уютный, совремменный отель прямо в центре города',
@@ -198,8 +198,8 @@ const getOffer = (lat, lng) => {
   return {
     title: OFFER[type].title,
     address: `${ lat }, ${ lng }`,
-    price: `${ createRandomNumber(0, OFFER_PRICE_MAX)() } руб`,
-    type: OFFER[type].type,
+    price: `${ createRandomNumber(0, OFFER_PRICE_MAX)() }`,
+    type: OFFER[type].typeTitle,
     rooms: createRandomNumber(0, OFFER_ROOMS_MAX)(),
     guests: createRandomNumber(1, OFFER_GUESTS_MAX)(),
     checkin,
