@@ -13,10 +13,27 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 const getArrayFromRandomElements = (chosenArrey) => Array.from(
   { length: getRandomInteger(0, chosenArrey.length - 1) },
   () => getRandomArrayElement(chosenArrey),
-).join(', ');
+);
+
+// поиск окончаний "сообщения" в зависимости от количества
+const pluralize = (forms, n) => {
+  let idx;
+
+  if (n === 0) {
+    idx = 0;
+  } else if (n % 10 === 1 && n % 100 !== 11) {
+    idx = 1; // one
+  } else if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
+    idx = 2; // few
+  } else {
+    idx = 2; // many
+  }
+  return forms[idx];
+};
 
 export {
   getRandomInteger,
   getRandomArrayElement,
-  getArrayFromRandomElements
+  getArrayFromRandomElements,
+  pluralize
 };
