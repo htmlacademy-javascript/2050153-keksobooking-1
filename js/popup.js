@@ -1,4 +1,5 @@
 import { pluralize } from './util.js';
+// import { activateForm, activateFilters } from './form.js';
 
 const CAPACITY_MESSAGE = {
   roomsForms: [
@@ -73,6 +74,13 @@ const createCard = ({ author, offer }) => {
     cardPhotos.src = photo;
     cardPhotos.append(cardPhoto);
   });
+
+  // card.addEventListener('change', (evt) => {
+  //   evt.preventDefault();
+
+  //   activateForm(author, offer),
+  //   activateFilters(author, offer),
+  // });
 
   return card;
 };
