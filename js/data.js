@@ -14,8 +14,8 @@ const AVATAR_MIN_INDEX = 1;
 const AVATAR_MAX_INDEX = 10;
 
 const OFFER_PRICE_MAX = 100000;
-const OFFER_ROOMS_MAX = 4;
-const OFFER_GUESTS_MAX = 10;
+const OFFER_ROOMS_MAX = 100;
+const OFFER_GUESTS_MAX = 3;
 
 const OBJECTS_LENGTH = 10;
 
@@ -200,8 +200,8 @@ const getOffer = (lat, lng) => {
     address: `${ lat }, ${ lng }`,
     price: `${ createRandomNumber(0, OFFER_PRICE_MAX)() }`,
     type: OFFER[type].typeTitle,
-    rooms: createRandomNumber(0, OFFER_ROOMS_MAX)(),
-    guests: createRandomNumber(1, OFFER_GUESTS_MAX)(),
+    rooms: createRandomNumber(1, OFFER_ROOMS_MAX)(),
+    guests: createRandomNumber(0, OFFER_GUESTS_MAX)(),
     checkin,
     checkout: getCheckoutTime(checkin),
     features: getArrayFromRandomElements(OFFER_FEATURES),

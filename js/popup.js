@@ -5,11 +5,13 @@ const CAPACITY_MESSAGE = {
   roomsForms: [
     'Комната-студия',
     'комната',
-    'комнаты'
+    'комнаты',
+    'комнат'
   ],
   guestsForms: [
-    '',
+    'не для гостей',
     'гостя',
+    'гостей',
     'гостей'
   ]
 };
@@ -25,9 +27,9 @@ const cardContainer = document.querySelector('#map-canvas');
 // выведение сообщение по количеству комнат и гостей
 const getCapacityMessage = (roomsNumber, guestsNumber) => {
   let CapacityMessage = '';
-  if (roomsNumber === 0) {
-    CapacityMessage = `${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)} для
-    ${ guestsNumber } ${pluralize(CAPACITY_MESSAGE.guestsForms, guestsNumber)}`;
+  if (guestsNumber === 0) {
+    CapacityMessage = `${ roomsNumber } ${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)}
+     ${pluralize(CAPACITY_MESSAGE.guestsForms, guestsNumber)}`;
   } else {
     CapacityMessage = `${ roomsNumber } ${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)} для
     ${ guestsNumber } ${pluralize(CAPACITY_MESSAGE.guestsForms, guestsNumber)}`;

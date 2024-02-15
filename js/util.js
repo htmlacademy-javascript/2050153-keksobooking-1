@@ -26,7 +26,7 @@ const pluralize = (forms, n) => {
   } else if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
     idx = 2; // few
   } else {
-    idx = 2; // many
+    idx = 3; // many
   }
   return forms[idx];
 };
