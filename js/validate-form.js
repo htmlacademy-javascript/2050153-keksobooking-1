@@ -25,7 +25,6 @@ const SubmitButtonText = {
 const ErrorText = {
   INVALID_TYTLE: `Заголовок объявления должен быть от ${ MIN_TITLE_LENGTH } до ${ MAX_TITLE_LENGTH } символов`,
   INVALID_PRICE: 'Цена за ночь - это числовое поле',
-  // INVALID_PRICE_AMOUNT: `Цена за ночь не должна привышать ${ MAX_PRICE } руб. и быть не менее ${ minPrice }`,
   INVALID_TIME: 'Время заезда равно времени выезда'
 };
 
@@ -77,31 +76,36 @@ const validateAdPriceAmount = (priceField) => {
   return false;
 };
 
-function getErrorMessageAdPrice() {
-  const adPriceErrorMessage = `Цена за ночь не должна привышать ${ MAX_PRICE } руб. и быть не менее ${ minPrice }`;
-  return adPriceErrorMessage;
-}
+const getErrorMessageAdPrice = () =>
+  `Цена за ночь не должна привышать ${ MAX_PRICE } руб. и быть не менее ${ minPrice } руб.`;
 
 /*
-Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом, что при выборе количества комнат вводятся ограничения на допустимые варианты выбора количества гостей:
-
-1 комната — «для 1 гостя»;
-2 комнаты — «для 2 гостей» или «для 1 гостя»;
-3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;
-100 комнат — «не для гостей».
+Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом, что при выборе количества комнат вводятся ограничения на допустимые варианты выбора количества гостей.
 */
+// const validateAdCapacity = (value) => {
+//   const rooms = Number(adRoomNumber.value);
+//   const capacity = Number(value);
 
-const validateAdCapacity = (value) => {
-  const rooms = Number(adRoomNumber.value);
-  const capacity = Number(value);
+//   if (rooms === 1 && capacity === 1) {
+//     return true;
+//   }
+//   if (rooms === 2 && (capacity === 1 || capacity === 2)) {
+//     return true;
+//   }
+//   if (rooms === 3 && capacity !== 0) {
+//     return true;
+//   }
+//   if (rooms === 100 && capacity === 0) {
+//     return true;
+//   }
+//   return false;
+// };
 
-  if (rooms === 1 && capacity === 1) {
-    return true;
-  }
-  if (rooms === 2 && (capacity === 1 || capacity === 2)) {
-    return true;
-  }
-  if (rooms === 3 && capacity !== 0) {
+const validateAdRooms = (value) => {
+  const capacity = Number(adCapacity.value);
+  const rooms = Number(value);
+
+  if (rooms !== 100 && rooms >= capacity && capacity !== 0) {
     return true;
   }
   if (rooms === 100 && capacity === 0) {
@@ -110,62 +114,51 @@ const validateAdCapacity = (value) => {
   return false;
 };
 
-const getErrorCapacityMessage = (capacity) => {
+const getErrorCapacityMessage = () => {
   const rooms = Number(adRoomNumber.value);
+  const capacity = Number(adCapacity.value);
   let errorCapacityMessage = '';
 
-  if (capacity !== 1 && rooms === 1) {
+  if (rooms === 1 && capacity !== 1) {
     errorCapacityMessage = '1 комната, для 1 гостя';
   }
-  if ((capacity > 2 || capacity === 0) && rooms === 2) {
+  if (rooms === 2 && (capacity > 2 || capacity === 0)) {
     errorCapacityMessage = '2 комнаты, для 1 или 2 гостей';
   }
   if (rooms === 3 && capacity === 0) {
     errorCapacityMessage = '3 комнаты, для 1, 2 или 3 гостей';
   }
-  if (capacity !== 0 && rooms === 100) {
+  if (rooms === 100 && capacity !== 0) {
     errorCapacityMessage = '100 комнат не для гостей';
   }
   return errorCapacityMessage;
 };
 
-// const validateAdRooms = (value) => {
-//   const rooms = Number(value);
-//   const capacity = Number(adCapacity.value);
 
-//   if (capacity === 1 && rooms === 1) {
-//     return true;
-//   }
-//   if (capacity === 2 && (rooms === 1 || rooms === 2)) {
-//     return true;
-//   }
-//   if (capacity === 3 && rooms !== 100) {
-//     return true;
-//   }
-//   if (capacity === 0 && rooms === 100) {
-//     return true;
-//   }
-//   return false;
-// };
-
-// Поля «Время заезда» и «Время выезда» синхронизированы
 // время на выезд должно быть равно времени на вьезд.
-const getCheckoutTime = (checkinTime) => {
-  const checkoutTime = adTimeOut.value;
-  const hourCheckout = Number(checkoutTime.slice(0, 2));
-  const hourCheckin = Number(checkinTime.slice(0, 2));
-  if (hourCheckout === hourCheckin) {
-    console.log(checkinTime);
-    console.log(checkoutTime);
-    return checkoutTime;
-  }
-};
-getCheckoutTime(adTimeIn.value);
+// const addTime = (currentField, targetedField) => {
+//   currentField.addEventListener('change', (evt) => {
+//     evt.preventDefault();
 
-const validateCheckoutTime = (checkinTime) => {
+//     targetedField.querySelectorAll('option').forEach((item) => {
+//       item.selected = item.value === evt.target.value;
+//     });
+//   });
+// };
+adTimeIn.addEventListener('change', (event) => {
+  adTimeOut.value = event.target.value;
+});
+
+adTimeOut.addEventListener('change', (event) => {
+  adTimeIn.value = event.target.value;
+});
+
+
+const validateTime = () => {
+  // addTime(adTimeIn, adTimeOut);
+  // addTime(adTimeOut, adTimeIn);
   const checkoutTime = adTimeOut.value;
-  console.log(checkinTime);
-  console.log(checkoutTime);
+  const checkinTime = adTimeIn.value;
   if (checkoutTime === checkinTime) {
     return true;
   }
@@ -173,11 +166,13 @@ const validateCheckoutTime = (checkinTime) => {
 };
 
 pristine.addValidator(adTitle, validateAdTitle, ErrorText.INVALID_TYTLE, true);
-pristine.addValidator(adPrice, validateAdPrice, ErrorText.INVALID_PRICE, true, 1);
-pristine.addValidator(adPrice, validateAdPriceAmount, getErrorMessageAdPrice(minPrice), true, 2);
-pristine.addValidator(adCapacity, validateAdCapacity, getErrorCapacityMessage(Number(adCapacity.value)), true);
-// pristine.addValidator(adRoomNumber, validateAdRooms, getErrorCapacityMessage(Number(adRoomNumber.value), Number(adCapacity.value)), true);
-pristine.addValidator(adTimeIn, validateCheckoutTime(adTimeIn.value), ErrorText.INVALID_TIME, true);
+pristine.addValidator(adPrice, validateAdPrice, ErrorText.INVALID_PRICE, true);
+pristine.addValidator(adPrice, validateAdPriceAmount, getErrorMessageAdPrice, true);
+// pristine.addValidator(adCapacity, validateAdCapacity, getErrorCapacityMessage, true);
+pristine.addValidator(adRoomNumber, validateAdRooms, getErrorCapacityMessage, true);
+pristine.addValidator(adTimeIn, validateTime, ErrorText.INVALID_TIME, true);
+pristine.addValidator(adTimeOut, validateTime, ErrorText.INVALID_TIME, true);
+
 
 const blockSubmitButton = () => {
   formSubmitButton.disabled = true;
@@ -213,4 +208,4 @@ const setOnFormSubmit = () => {
   });
 };
 
-export { addMinPrice, resetForm, setOnFormSubmit };
+export { resetForm, setOnFormSubmit };
