@@ -3,13 +3,11 @@ import { pluralize } from './util.js';
 
 const CAPACITY_MESSAGE = {
   roomsForms: [
-    'Комната-студия',
     'комната',
     'комнаты',
     'комнат'
   ],
   guestsForms: [
-    'не для гостей',
     'гостя',
     'гостей',
     'гостей'
@@ -29,7 +27,7 @@ const getCapacityMessage = (roomsNumber, guestsNumber) => {
   let CapacityMessage = '';
   if (guestsNumber === 0) {
     CapacityMessage = `${ roomsNumber } ${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)}
-     ${pluralize(CAPACITY_MESSAGE.guestsForms, guestsNumber)}`;
+     не для гостей`;
   } else {
     CapacityMessage = `${ roomsNumber } ${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)} для
     ${ guestsNumber } ${pluralize(CAPACITY_MESSAGE.guestsForms, guestsNumber)}`;
