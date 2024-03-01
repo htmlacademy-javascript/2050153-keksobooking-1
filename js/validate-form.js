@@ -57,6 +57,13 @@ const pristine = new Pristine(form, {
   errorTextClass: 'ad-form__element--invalid',
 });
 
+const changeField = (changedField, comparedField) => {
+  changeField.addEventListener('change', (event) => {
+    comparedField.value = event.target.value;
+    pristine.validate(changeField);
+  });
+};
+
 // валидация заголовока объявления
 const validateAdTitle = (title) =>
   title.length >= MIN_TITLE_LENGTH && title.length <= MAX_TITLE_LENGTH;
@@ -65,34 +72,24 @@ const validateAdTitle = (title) =>
 const validateAdPrice = (priceField) => PRICE.test(+priceField);
 
 //Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
-const filterMinPrice = (propertyType) => {
-  Object.entries(PriceByPropertyType).map(([key, value]) => {
-    if (propertyType === `${key}`) {
-      minPrice = `${value}`;
-    }
-    return minPrice;
-  });
+const updateMinPrice = (propertyType) => {
+  minPrice = PriceByPropertyType[propertyType];
+  adPrice.setAttribute('min', Number(minPrice));
+  adPrice.setAttribute('max', Number(MAX_PRICE));
+  adPrice.placeholder = minPrice;
 };
 
-const updateMinPrice = () => {
-  houseType.addEventListener('change', (evt) => {
-    evt.preventDefault();
-    filterMinPrice(houseType.value);
-    adPrice.setAttribute('max', Number(MAX_PRICE));
-    adPrice.setAttribute('min', Number(minPrice));
-  });
-};
-updateMinPrice();
+houseType.addEventListener('change', (evt) => {
+  evt.preventDefault();
+  updateMinPrice(houseType.value);
+  pristine.validate(adPrice);
+});
 
 const validateAdPriceAmount = (priceField) =>
-  priceField <= MAX_PRICE && priceField >= minPrice;
+  (priceField <= MAX_PRICE && priceField >= minPrice);
 
 const getErrorMessageAdPrice = () =>
   `Цена за ночь не должна привышать ${ MAX_PRICE } руб. и быть не менее ${ minPrice } руб.`;
-
-houseType.addEventListener('change', () => {
-  pristine.validate();
-});
 
 /*
 Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом,
@@ -135,19 +132,11 @@ const getErrorCapacityMessage = () => {
 };
 
 // время на выезд должно быть равно времени на вьезд.
-adTimeIn.addEventListener('change', (event) => {
-  adTimeOut.value = event.target.value;
-  pristine.validate();
-});
-
-adTimeOut.addEventListener('change', (event) => {
-  adTimeIn.value = event.target.value;
-  pristine.validate();
-});
-
-
-const validateTime = () =>
-  (adTimeOut.value === adTimeIn.value);
+const validateTime = () => {
+  changeField(adTimeIn, adTimeOut);
+  changeField(adTimeOut, adTimeIn);
+  return (adTimeOut.value === adTimeIn.value);
+};
 
 pristine.addValidator(adTitle, validateAdTitle, ErrorText.INVALID_TYTLE, true);
 pristine.addValidator(adPrice, validateAdPrice, ErrorText.INVALID_PRICE, true);
@@ -156,7 +145,7 @@ pristine.addValidator(adRoomNumber, validateAdRooms, getErrorCapacityMessage, tr
 pristine.addValidator(adTimeIn, validateTime, ErrorText.INVALID_TIME, true);
 pristine.addValidator(adTimeOut, validateTime, ErrorText.INVALID_TIME, true);
 
-adCapacity.addEventListener('change', () => pristine.validate());
+adCapacity.addEventListener('change', () => pristine.validate(adRoomNumber));
 
 
 const blockSubmitButton = () => {
