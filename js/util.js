@@ -15,16 +15,15 @@ const getArrayFromRandomElements = (chosenArrey) => Array.from(
   () => getRandomArrayElement(chosenArrey),
 );
 
-// поиск окончаний "сообщения" в зависимости от количества
+// поиск окончаний "сообщения" в зависимости от количества. Стандартная функция.
+// get from: https://mihaly4.ru/plural-ili-mnozhestvennoe-chislo-slov-v-js;
 const pluralize = (forms, n) => {
   let idx;
 
-  if (n === 0) {
-    idx = 0;
-  } else if (n % 10 === 1 && n % 100 !== 11) {
-    idx = 1; // one
+  if (n % 10 === 1 && n % 100 !== 11) {
+    idx = 0; // one
   } else if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
-    idx = 2; // few
+    idx = 1; // few
   } else {
     idx = 2; // many
   }

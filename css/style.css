@@ -672,7 +672,7 @@ fieldset {
   border: 1px solid red;
 }
 
-.ad-form__element--invalid .text-help {
+.ad-form__element--invalid {
   color: red;
   font-size: 12px;
   padding: 4px;
