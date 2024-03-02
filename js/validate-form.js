@@ -58,7 +58,7 @@ const pristine = new Pristine(form, {
 });
 
 const changeField = (changedField, comparedField) => {
-  changeField.addEventListener('change', (event) => {
+  changedField.addEventListener('change', (event) => {
     comparedField.value = event.target.value;
     pristine.validate(changeField);
   });
