@@ -1,4 +1,5 @@
 import { pluralize } from './util.js';
+import { addPostedMarker } from './map.js';
 // import { activateForm, activateFilters } from './form.js';
 
 const CAPACITY_MESSAGE = {
@@ -49,8 +50,7 @@ const filterFeatures = (features, featuresList) => {
 };
 
 // создание клонированого изображений по шаблону
-const createCard = ({ author, offer }) => {
-
+const createCard = ({ author, offer, location }) => {
   const card = cardTemplate.cloneNode(true);
 
   card.querySelector('.popup__avatar').src = author.avatar;
@@ -75,6 +75,8 @@ const createCard = ({ author, offer }) => {
     cardPhotos.append(cardPhoto);
   });
 
+  addPostedMarker(location, card);
+  // addPopup(location);
   // card.addEventListener('change', (evt) => {
   //   evt.preventDefault();
 
