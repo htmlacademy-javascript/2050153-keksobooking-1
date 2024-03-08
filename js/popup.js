@@ -21,7 +21,7 @@ const cardTemplate = document.querySelector('#card')
   .querySelector('.popup');
 
 // находим контейнер для новосозданных карточек, временно
-const cardContainer = document.querySelector('#map-canvas');
+// const cardContainer = document.querySelector('#map-canvas');
 
 // выведение сообщение по количеству комнат и гостей
 const getCapacityMessage = (roomsNumber, guestsNumber) => {
@@ -88,13 +88,13 @@ const createCard = ({ author, offer, location }) => {
 };
 
 // удаляем содержимое созданной карты/popup
-const resetCard = () => {
-  cardContainer.querySelectorAll('.popup').forEach((element) => element.remove());
-};
+// const resetCard = () => {
+//   cardContainer.querySelectorAll('.popup').forEach((element) => element.remove());
+// };
 
 // добавление клонированного предложения в контейнер "#map-canvas", временно
 const renderCard = (offers) => {
-  resetCard();
+  // resetCard();
   const fragment = document.createDocumentFragment();
 
   offers.forEach((offer) => {
@@ -102,7 +102,7 @@ const renderCard = (offers) => {
     fragment.append(popupCard);
   });
 
-  cardContainer.append(fragment);
+  // cardContainer.append(fragment);
 };
 
 export { renderCard };

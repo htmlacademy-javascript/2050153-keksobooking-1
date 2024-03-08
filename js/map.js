@@ -56,6 +56,7 @@ const addPinIcon = (icon) => {
 
 const mainPinMarker = L.marker(startCoordinate, {
   draggable: true,
+  autoPan: true,
   icon: addPinIcon(mainIconConfig),
 });
 

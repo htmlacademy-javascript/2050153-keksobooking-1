@@ -1,5 +1,6 @@
 import { pristine } from './validate-form-fields.js';
 import { resetMap, addPostedMarker } from './map.js';
+import { destroySlider } from './form-fields.js';
 
 const form = document.querySelector('.ad-form');
 const formSubmitButton = form.querySelector('.ad-form__submit');
@@ -22,6 +23,7 @@ const unblockSubmitButton = () => {
 
 const resetForm = () => {
   pristine.reset();
+  destroySlider();
   form.reset();
 };
 
