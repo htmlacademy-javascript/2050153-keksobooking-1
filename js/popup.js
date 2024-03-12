@@ -76,7 +76,6 @@ const createCard = ({ author, offer, location }) => {
   });
 
   addPostedMarker(location, card);
-  // addPopup(location);
   // card.addEventListener('change', (evt) => {
   //   evt.preventDefault();
 

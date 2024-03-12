@@ -1,5 +1,5 @@
 import { activateForm } from './form.js';
-import { addAddress } from './form-fields.js';
+import { updateAddressField } from './form-fields.js';
 
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -36,14 +36,11 @@ let newCoordinate = startCoordinate;
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    // console.log('Карта инициализирована');
+    // 'Карта инициализирована'
     activateForm();
+    // setSlider(adPrice.placeholder);
   })
   .setView(cityCenter, ZOOM);
-
-L.tileLayer(TILE_LAYER, {
-  attribution: COPYRIGHT
-}).addTo(map);
 
 const addPinIcon = (icon) => {
   const pinIcon = L.icon({
@@ -60,8 +57,6 @@ const mainPinMarker = L.marker(startCoordinate, {
   icon: addPinIcon(mainIconConfig),
 });
 
-mainPinMarker.addTo(map);
-
 const fixedNumberPrecision = (obj) => {
   const values = Object.values(obj);
   const result = [];
@@ -74,21 +69,6 @@ const fixedNumberPrecision = (obj) => {
   return obj;
 };
 
-mainPinMarker.on('moveend', (evt) => {
-  if (evt.target.getLatLng() !== startCoordinate) {
-    newCoordinate = fixedNumberPrecision(evt.target.getLatLng());
-    addAddress(newCoordinate);
-  }
-});
-
-// const popup = L.popup();
-// function onMapClick(e) {
-//   popup
-//     .setLatLng(e.latlng)
-//     .setContent(e.content)
-//     .openOn(map);
-// }
-
 const addPostedMarker = (location, content) => {
   const postedPinMarker = L.marker(location, {
     draggable: false,
@@ -96,12 +76,24 @@ const addPostedMarker = (location, content) => {
   });
 
   postedPinMarker.addTo(map);
-  postedPinMarker.bindPopup(content).openPopup();
-  // postedPinMarker.on('click', onMapClick);
+  postedPinMarker.bindPopup(content);
 };
 
 const resetMap = () => {
   map.setView(startCoordinate, ZOOM);
 };
+
+mainPinMarker.addTo(map);
+
+mainPinMarker.on('moveend', (evt) => {
+  if (evt.target.getLatLng() !== startCoordinate) {
+    newCoordinate = fixedNumberPrecision(evt.target.getLatLng());
+    updateAddressField(newCoordinate);
+  }
+});
+
+L.tileLayer(TILE_LAYER, {
+  attribution: COPYRIGHT
+}).addTo(map);
 
 export { resetMap, addPostedMarker };

@@ -1,8 +1,9 @@
 import { pristine } from './validate-form-fields.js';
-import { resetMap, addPostedMarker } from './map.js';
-import { destroySlider } from './form-fields.js';
+import { resetMap } from './map.js';
+import { setSlider } from './form-fields.js';
 
 const form = document.querySelector('.ad-form');
+const adPrice = form.querySelector('#price');
 const formSubmitButton = form.querySelector('.ad-form__submit');
 const formResetButton = form.querySelector('.ad-form__reset');
 
@@ -23,7 +24,7 @@ const unblockSubmitButton = () => {
 
 const resetForm = () => {
   pristine.reset();
-  destroySlider();
+  setSlider(adPrice.placeholder);
   form.reset();
 };
 
@@ -32,13 +33,15 @@ const onResetButtonClick = () => {
   resetMap();
 };
 
+/* TODO: код для добавления маркера после отправки формы
 const onSubmitButtonClick = () => {
-  addPostedMarker();
-};
+   addPostedMarker();
+ };
 
 const submitForm = () => {
   formSubmitButton.addEventListener('click', onSubmitButtonClick);
 };
+*/
 
 formResetButton.addEventListener('click', onResetButtonClick);
 
@@ -49,7 +52,9 @@ const setOnFormSubmit = () => {
 
     if (isValid) {
       unblockSubmitButton();
+      /* TODO: см. выше
       submitForm();
+      */
     } else {
       blockSubmitButton();
     }

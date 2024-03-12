@@ -1,5 +1,5 @@
 import { pluralize } from './util.js';
-import { updateSlider } from './form-fields.js';
+import { setSlider, updateSlider } from './form-fields.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -23,6 +23,7 @@ const CAPACITY_MESSAGE = {
 const form = document.querySelector('.ad-form');
 const adTitle = form.querySelector('#title');
 const adPrice = form.querySelector('#price');
+const sliderElement = form.querySelector('.ad-form__slider');
 const houseType = form.querySelector('#type');
 const adRoomNumber = form.querySelector('#room_number');
 const adCapacity = form.querySelector('#capacity');
@@ -37,7 +38,7 @@ const PriceByPropertyType = {
   palace: 10000
 };
 
-let minPrice = 0;
+let minPrice = PriceByPropertyType[houseType.value];
 
 const ErrorText = {
   INVALID_TYTLE: `Заголовок объявления должен быть от ${ MIN_TITLE_LENGTH } до ${ MAX_TITLE_LENGTH } символов`,
@@ -70,11 +71,11 @@ const validateAdPrice = (priceField) => PRICE.test(+priceField);
 
 //Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
 const updateMinPrice = (propertyType) => {
-  minPrice = PriceByPropertyType[propertyType];
+  minPrice = Number(PriceByPropertyType[propertyType]);
   adPrice.setAttribute('min', Number(minPrice));
   adPrice.setAttribute('max', Number(MAX_PRICE));
   adPrice.placeholder = minPrice;
-  updateSlider(minPrice, MAX_PRICE);
+  setSlider(minPrice);
 };
 
 const validateAdPriceAmount = (priceField) =>
@@ -134,6 +135,16 @@ const onHouseTypeChange = () => {
 };
 
 houseType.addEventListener('change', onHouseTypeChange);
+
+adPrice.addEventListener('change', () => {
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: minPrice,
+      max: MAX_PRICE,
+    }
+  });
+  updateSlider();
+});
 
 pristine.addValidator(adTitle, validateAdTitle, ErrorText.INVALID_TYTLE, true);
 pristine.addValidator(adPrice, validateAdPrice, ErrorText.INVALID_PRICE, true);
