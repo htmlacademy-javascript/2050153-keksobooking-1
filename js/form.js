@@ -1,11 +1,10 @@
-// const body = document.querySelector('body');
+import { setSlider } from './form-fields.js';
 
 const form = document.querySelector('.ad-form');
 const formElements = form.querySelectorAll('.ad-form__element');
-// const formSlider = form.querySelector('.ad-form__slider');
+const adPrice = form.querySelector('#price');
 
 const map = document.querySelector('.map');
-// const mapCanvas = document.querySelector('.map__canvas');
 const mapFilter = map.querySelector('.map__filters');
 const mapFilterElements = mapFilter.querySelectorAll('.map__filter');
 
@@ -14,8 +13,6 @@ function disableForm () {
   formElements.forEach((formElement)=> {
     formElement.setAttribute('disabled', 'disabled');
   });
-  // formSlider.setAttribute('disabled', 'disabled');
-  // document.removeEventListener('change');
 }
 
 function disableFilters () {
@@ -23,8 +20,6 @@ function disableFilters () {
   mapFilterElements.forEach((filter)=> {
     filter.setAttribute('disabled', 'disabled');
   });
-
-  // document.removeEventListener('change');
 }
 
 function activateForm () {
@@ -32,8 +27,7 @@ function activateForm () {
   formElements.forEach((formElement)=> {
     formElement.removeAttribute('disabled');
   });
-  // formSlider.removeAttribute('disabled');
-  // document.addEventListener('change');
+  setSlider(adPrice.placeholder);
 }
 
 function activateFilters () {
@@ -41,33 +35,7 @@ function activateFilters () {
   mapFilterElements.forEach((filter)=> {
     filter.removeAttribute('disabled');
   });
-
-  // document.addEventListener('change');
 }
-
-// // При открытии страница находится в неактивном состоянии
-// body.addEventListener('DOMContentLoaded', () => {
-//   if (document.readyState === 'complete') {
-//     disableForm();
-//     disableFilters();
-//   }
-// });
-
-// // Успешная инициализация карты (карта реализуется сторонней библиотекой Leaflet) переводит форму заполнения информации об объявлении в активное состояние.
-// mapCanvas.addEventListener('change', (evt) => {
-//   evt.preventDefault();
-
-//   if (mapCanvas.readyState === 'complete') {
-//     activateForm();
-//   }
-// });
-
-// // Успешная загрузка данных об объявлениях с сервера переводит в активное состояние фильтры.
-// mapFilter.addEventListener('change', (evt) => {
-//   evt.preventDefault();
-
-//   activateFilters();
-// });
 
 export {
   disableForm,

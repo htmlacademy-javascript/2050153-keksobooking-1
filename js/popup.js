@@ -1,4 +1,5 @@
 import { pluralize } from './util.js';
+import { addPostedMarker } from './map.js';
 // import { activateForm, activateFilters } from './form.js';
 
 const CAPACITY_MESSAGE = {
@@ -20,7 +21,7 @@ const cardTemplate = document.querySelector('#card')
   .querySelector('.popup');
 
 // находим контейнер для новосозданных карточек, временно
-const cardContainer = document.querySelector('#map-canvas');
+// const cardContainer = document.querySelector('#map-canvas');
 
 // выведение сообщение по количеству комнат и гостей
 const getCapacityMessage = (roomsNumber, guestsNumber) => {
@@ -49,8 +50,7 @@ const filterFeatures = (features, featuresList) => {
 };
 
 // создание клонированого изображений по шаблону
-const createCard = ({ author, offer }) => {
-
+const createCard = ({ author, offer, location }) => {
   const card = cardTemplate.cloneNode(true);
 
   card.querySelector('.popup__avatar').src = author.avatar;
@@ -75,6 +75,7 @@ const createCard = ({ author, offer }) => {
     cardPhotos.append(cardPhoto);
   });
 
+  addPostedMarker(location, card);
   // card.addEventListener('change', (evt) => {
   //   evt.preventDefault();
 
@@ -86,13 +87,13 @@ const createCard = ({ author, offer }) => {
 };
 
 // удаляем содержимое созданной карты/popup
-const resetCard = () => {
-  cardContainer.querySelectorAll('.popup').forEach((element) => element.remove());
-};
+// const resetCard = () => {
+//   cardContainer.querySelectorAll('.popup').forEach((element) => element.remove());
+// };
 
 // добавление клонированного предложения в контейнер "#map-canvas", временно
 const renderCard = (offers) => {
-  resetCard();
+  // resetCard();
   const fragment = document.createDocumentFragment();
 
   offers.forEach((offer) => {
@@ -100,7 +101,7 @@ const renderCard = (offers) => {
     fragment.append(popupCard);
   });
 
-  cardContainer.append(fragment);
+  // cardContainer.append(fragment);
 };
 
 export { renderCard };
