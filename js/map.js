@@ -1,4 +1,4 @@
-import { activateForm } from './form.js';
+import { activateForm, disableForm } from './form.js';
 import { updateAddressField } from './form-fields.js';
 
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -36,9 +36,11 @@ let newCoordinate = startCoordinate;
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    // 'Карта инициализирована'
-    activateForm();
-    // setSlider(adPrice.placeholder);
+    if (document.readyState === 'interactive') { // 'Карта инициализирована'
+      activateForm();
+    } else {
+      disableForm();
+    }
   })
   .setView(cityCenter, ZOOM);
 

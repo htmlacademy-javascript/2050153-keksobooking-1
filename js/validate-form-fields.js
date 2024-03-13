@@ -1,5 +1,5 @@
 import { pluralize } from './util.js';
-import { setSlider, updateSlider } from './form-fields.js';
+import { updateSlider } from './form-fields.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -23,7 +23,6 @@ const CAPACITY_MESSAGE = {
 const form = document.querySelector('.ad-form');
 const adTitle = form.querySelector('#title');
 const adPrice = form.querySelector('#price');
-const sliderElement = form.querySelector('.ad-form__slider');
 const houseType = form.querySelector('#type');
 const adRoomNumber = form.querySelector('#room_number');
 const adCapacity = form.querySelector('#capacity');
@@ -75,7 +74,7 @@ const updateMinPrice = (propertyType) => {
   adPrice.setAttribute('min', Number(minPrice));
   adPrice.setAttribute('max', Number(MAX_PRICE));
   adPrice.placeholder = minPrice;
-  setSlider(minPrice);
+  updateSlider(minPrice);
 };
 
 const validateAdPriceAmount = (priceField) =>
@@ -135,16 +134,6 @@ const onHouseTypeChange = () => {
 };
 
 houseType.addEventListener('change', onHouseTypeChange);
-
-adPrice.addEventListener('change', () => {
-  sliderElement.noUiSlider.updateOptions({
-    range: {
-      min: minPrice,
-      max: MAX_PRICE,
-    }
-  });
-  updateSlider();
-});
 
 pristine.addValidator(adTitle, validateAdTitle, ErrorText.INVALID_TYTLE, true);
 pristine.addValidator(adPrice, validateAdPrice, ErrorText.INVALID_PRICE, true);

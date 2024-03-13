@@ -1,3 +1,5 @@
+const ALERT_SHOW_TIME = 5000;
+
 // получение случайного числа из диапазона
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -30,9 +32,38 @@ const pluralize = (forms, n) => {
   return forms[idx];
 };
 
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const isEnterKey = (evt) => evt.key === 'Enter';
+
+const showAlertMessage = (message) => {
+  const alertMessage = document.createElement('div');
+  alertMessage.style.zIndex = '1000';
+  alertMessage.style.position = 'absolute';
+  alertMessage.style.height = 'max-content';
+  alertMessage.style.left = '0';
+  alertMessage.style.right = '0';
+  alertMessage.style.top = '40%';
+  alertMessage.style.padding = '10px 3px';
+  alertMessage.style.fontSize = '30px';
+  alertMessage.style.textTransform = 'lowercase';
+  alertMessage.style.textAlign = 'center';
+  alertMessage.style.backgroundColor = 'rgb(255, 0, 0, 0.5)';
+
+  alertMessage.textContent = message;
+  document.body.append(alertMessage);
+
+  setTimeout(() => {
+    alertMessage.remove();
+  }, ALERT_SHOW_TIME);
+};
+
 export {
   getRandomInteger,
   getRandomArrayElement,
   getArrayFromRandomElements,
-  pluralize
+  pluralize,
+  isEscapeKey,
+  isEnterKey,
+  showAlertMessage
 };

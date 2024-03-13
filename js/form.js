@@ -1,8 +1,8 @@
-import { setSlider } from './form-fields.js';
+import { createSlider } from './form-fields.js';
 
 const form = document.querySelector('.ad-form');
 const formElements = form.querySelectorAll('.ad-form__element');
-const adPrice = form.querySelector('#price');
+// const adPrice = form.querySelector('#price');
 
 const map = document.querySelector('.map');
 const mapFilter = map.querySelector('.map__filters');
@@ -27,7 +27,7 @@ function activateForm () {
   formElements.forEach((formElement)=> {
     formElement.removeAttribute('disabled');
   });
-  setSlider(adPrice.placeholder);
+  createSlider();
 }
 
 function activateFilters () {
