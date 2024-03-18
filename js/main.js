@@ -23,6 +23,7 @@ try {
   renderCard(data);
   activateFilters();
 } catch (err) {
+  console.error(err);
   showAlertMessage(err.message);
   disableFilters();
 }
