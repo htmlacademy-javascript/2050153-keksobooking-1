@@ -49,18 +49,19 @@ const filterFeatures = (features, featuresList) => {
 };
 
 const checkCard = (card, objKey, elementClass, condition, specialOutcome) => {
+  const element = card.querySelector(elementClass);
   if (typeof objKey === 'undefined') {
-    card.querySelector(elementClass).style.display = 'none';
+    element.style.display = 'none';
   } else {
     if (condition === 'textContent') {
       if (specialOutcome) {
-        card.querySelector(elementClass).textContent = specialOutcome;
+        element.textContent = specialOutcome;
       } else {
-        card.querySelector(elementClass).textContent = objKey;
+        element.textContent = objKey;
       }
     }
     if (condition === 'src') {
-      card.querySelector(elementClass).src = objKey;
+      element.src = objKey;
     }
   }
 };
@@ -102,7 +103,7 @@ const createCard = ({ author, offer, location }) => {
   } else {
     offer.photos.forEach((photo) => {
       const cardPhoto = card.querySelector('.popup__photo');
-      cardPhotos.src = photo;
+      cardPhoto.src = photo;
       cardPhotos.append(cardPhoto);
     });
   }
