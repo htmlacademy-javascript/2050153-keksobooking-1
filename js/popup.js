@@ -48,19 +48,15 @@ const filterFeatures = (features, featuresList) => {
   });
 };
 
-const checkCard = (card, objKey, elementClass, condition, specialOutcome) => {
+const checkCard = (card, objKey, elementClass, contentType, specialOutcome) => {
   const element = card.querySelector(elementClass);
-  if (typeof objKey === 'undefined') {
+  if (objKey === 'undefined') {
     element.style.display = 'none';
   } else {
-    if (condition === 'textContent') {
-      if (specialOutcome) {
-        element.textContent = specialOutcome;
-      } else {
-        element.textContent = objKey;
-      }
+    if (contentType === 'textContent') {
+      element.textContent = specialOutcome ?? objKey;
     }
-    if (condition === 'src') {
+    if (contentType === 'src') {
       element.src = objKey;
     }
   }
@@ -78,14 +74,6 @@ const createCard = ({ author, offer, location }) => {
   checkCard(card, offer.rooms, '.popup__text--capacity', 'textContent', getCapacityMessage(offer.rooms, offer.guests));
   checkCard(card, offer.checkin, '.popup__text--time', 'textContent', `Заезд после ${ offer.checkin }, выезд до ${ offer.checkout }`);
   checkCard(card, offer.description, '.popup__description', 'textContent');
-  // card.querySelector('.popup__avatar').src = author.avatar;
-  // card.querySelector('.popup__title').textContent = offer.title;
-  // card.querySelector('.popup__text--address').textContent = offer.address;
-  // card.querySelector('.popup__text--price').textContent = `${ offer.price } ₽/ночь`;
-  // card.querySelector('.popup__type').textContent = offer.type;
-  // card.querySelector('.popup__text--capacity').textContent = getCapacityMessage(offer.rooms, offer.guests);
-  // card.querySelector('.popup__text--time').textContent = `Заезд после ${ offer.checkin }, выезд до ${ offer.checkout }`;
-  // card.querySelector('.popup__description').textContent = offer.description;
 
   const cardFeatures = card.querySelector('.popup__features');
   const featuresList = cardFeatures.querySelectorAll('.popup__feature');

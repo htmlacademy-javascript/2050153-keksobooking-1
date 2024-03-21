@@ -28,6 +28,7 @@ const resetForm = () => {
   pristine.reset();
   updateSlider(minPriceValue);
   form.reset();
+  formSubmitButton.textContent = SubmitButtonText.IDLE;
 };
 
 const onResetButtonClick = () => {
@@ -35,15 +36,15 @@ const onResetButtonClick = () => {
   resetMap();
 };
 
-/* TODO: код для добавления маркера после отправки формы
-const onSubmitButtonClick = () => {
-   addPostedMarker();
- };
+// TODO: код для добавления маркера после отправки формы
+// const onSubmitButtonClick = () => {
+//    addPostedMarker();
+//  };
 
-const submitForm = () => {
-  formSubmitButton.addEventListener('click', onSubmitButtonClick);
-};
-*/
+// const submitForm = () => {
+//   formSubmitButton.addEventListener('click', onSubmitButtonClick);
+// };
+
 
 formResetButton.addEventListener('click', onResetButtonClick);
 

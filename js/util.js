@@ -46,7 +46,6 @@ const showAlertMessage = (message) => {
   alertMessage.style.top = '40%';
   alertMessage.style.padding = '10px 3px';
   alertMessage.style.fontSize = '30px';
-  alertMessage.style.textTransform = 'lowercase';
   alertMessage.style.textAlign = 'center';
   alertMessage.style.backgroundColor = 'rgb(255, 0, 0, 0.5)';
 
