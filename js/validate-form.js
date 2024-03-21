@@ -1,6 +1,6 @@
 import { pristine } from './validate-form-fields.js';
 import { resetMap } from './map.js';
-import { setSlider } from './form-fields.js';
+import { updateSlider } from './form-fields.js';
 
 const form = document.querySelector('.ad-form');
 const adPrice = form.querySelector('#price');
@@ -11,6 +11,8 @@ const SubmitButtonText = {
   IDLE: 'Опубликовать',
   SENDING: 'Публикую...'
 };
+
+const minPriceValue = Number(adPrice.placeholder);
 
 const blockSubmitButton = () => {
   formSubmitButton.disabled = true;
@@ -24,8 +26,9 @@ const unblockSubmitButton = () => {
 
 const resetForm = () => {
   pristine.reset();
-  setSlider(adPrice.placeholder);
+  updateSlider(minPriceValue);
   form.reset();
+  formSubmitButton.textContent = SubmitButtonText.IDLE;
 };
 
 const onResetButtonClick = () => {
@@ -33,30 +36,27 @@ const onResetButtonClick = () => {
   resetMap();
 };
 
-/* TODO: код для добавления маркера после отправки формы
-const onSubmitButtonClick = () => {
-   addPostedMarker();
- };
+// TODO: код для добавления маркера после отправки формы
+// const onSubmitButtonClick = () => {
+//    addPostedMarker();
+//  };
 
-const submitForm = () => {
-  formSubmitButton.addEventListener('click', onSubmitButtonClick);
-};
-*/
+// const submitForm = () => {
+//   formSubmitButton.addEventListener('click', onSubmitButtonClick);
+// };
+
 
 formResetButton.addEventListener('click', onResetButtonClick);
 
-const setOnFormSubmit = () => {
-  form.addEventListener('submit', (evt) => {
+const setOnFormSubmit = (callback) => {
+  form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
 
     if (isValid) {
-      unblockSubmitButton();
-      /* TODO: см. выше
-      submitForm();
-      */
-    } else {
       blockSubmitButton();
+      await callback(new FormData(form));
+      unblockSubmitButton();
     }
   });
 };

@@ -1,6 +1,5 @@
 import { pluralize } from './util.js';
 import { addPostedMarker } from './map.js';
-// import { activateForm, activateFilters } from './form.js';
 
 const CAPACITY_MESSAGE = {
   roomsForms: [
@@ -21,7 +20,7 @@ const cardTemplate = document.querySelector('#card')
   .querySelector('.popup');
 
 // находим контейнер для новосозданных карточек, временно
-// const cardContainer = document.querySelector('#map-canvas');
+const cardContainer = document.querySelector('#map-canvas');
 
 // выведение сообщение по количеству комнат и гостей
 const getCapacityMessage = (roomsNumber, guestsNumber) => {
@@ -49,51 +48,66 @@ const filterFeatures = (features, featuresList) => {
   });
 };
 
+const checkCard = (card, objKey, elementClass, contentType, specialOutcome) => {
+  const element = card.querySelector(elementClass);
+  if (objKey === 'undefined') {
+    element.style.display = 'none';
+  } else {
+    if (contentType === 'textContent') {
+      element.textContent = specialOutcome ?? objKey;
+    }
+    if (contentType === 'src') {
+      element.src = objKey;
+    }
+  }
+};
+
 // создание клонированого изображений по шаблону
 const createCard = ({ author, offer, location }) => {
   const card = cardTemplate.cloneNode(true);
 
-  card.querySelector('.popup__avatar').src = author.avatar;
-  card.querySelector('.popup__title').textContent = offer.title;
-  card.querySelector('.popup__text--address').textContent = offer.address;
-  card.querySelector('.popup__text--price').textContent = `${ offer.price } ₽/ночь`;
-  card.querySelector('.popup__type').textContent = offer.type;
-  card.querySelector('.popup__text--capacity').textContent = getCapacityMessage(offer.rooms, offer.guests);
-  card.querySelector('.popup__text--time').textContent = `Заезд после ${ offer.checkin }, выезд до ${ offer.checkout }`;
-  card.querySelector('.popup__description').textContent = offer.description;
+  checkCard(card, author.avatar, '.popup__avatar', 'src');
+  checkCard(card, offer.title, '.popup__title', 'textContent');
+  checkCard(card, offer.address, '.popup__text--address', 'textContent');
+  checkCard(card, offer.price, '.popup__text--price', 'textContent', `${ offer.price } ₽/ночь`);
+  checkCard(card, offer.type, '.popup__type', 'textContent');
+  checkCard(card, offer.rooms, '.popup__text--capacity', 'textContent', getCapacityMessage(offer.rooms, offer.guests));
+  checkCard(card, offer.checkin, '.popup__text--time', 'textContent', `Заезд после ${ offer.checkin }, выезд до ${ offer.checkout }`);
+  checkCard(card, offer.description, '.popup__description', 'textContent');
 
   const cardFeatures = card.querySelector('.popup__features');
   const featuresList = cardFeatures.querySelectorAll('.popup__feature');
 
-  filterFeatures(offer.features, featuresList);
+  if (typeof offer.features === 'undefined') {
+    cardFeatures.style.display = 'none';
+  } else {
+    filterFeatures(offer.features, featuresList);
+  }
 
   const cardPhotos = card.querySelector('.popup__photos');
 
-  offer.photos.forEach((photo) => {
-    const cardPhoto = card.querySelector('.popup__photo');
-    cardPhotos.src = photo;
-    cardPhotos.append(cardPhoto);
-  });
+  if (typeof offer.photos === 'undefined') {
+    cardPhotos.style.display = 'none';
+  } else {
+    offer.photos.forEach((photo) => {
+      const cardPhoto = card.querySelector('.popup__photo');
+      cardPhoto.src = photo;
+      cardPhotos.append(cardPhoto);
+    });
+  }
 
   addPostedMarker(location, card);
-  // card.addEventListener('change', (evt) => {
-  //   evt.preventDefault();
-
-  //   activateForm(author, offer),
-  //   activateFilters(author, offer),
-  // });
-
   return card;
 };
 
 // удаляем содержимое созданной карты/popup
-// const resetCard = () => {
-//   cardContainer.querySelectorAll('.popup').forEach((element) => element.remove());
-// };
+const resetCard = () => {
+  cardContainer.querySelectorAll('.popup').forEach((element) => element.remove());
+};
 
 // добавление клонированного предложения в контейнер "#map-canvas", временно
 const renderCard = (offers) => {
-  // resetCard();
+  resetCard();
   const fragment = document.createDocumentFragment();
 
   offers.forEach((offer) => {
@@ -101,7 +115,7 @@ const renderCard = (offers) => {
     fragment.append(popupCard);
   });
 
-  // cardContainer.append(fragment);
+  cardContainer.append(fragment);
 };
 
 export { renderCard };

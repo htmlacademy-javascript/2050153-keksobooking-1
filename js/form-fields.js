@@ -19,14 +19,14 @@ const onSliderUpdate = () => {
   adPrice.value = sliderElement.noUiSlider.get();
 };
 
-const createSlider = (fieldPlaceholder) => {
+const createSlider = () => {
   noUiSlider.create(sliderElement, {
     range: {
-      min: Number(fieldPlaceholder),
+      min: Number(adPrice.placeholder),
       max: MAX_PRICE
     },
     step: 1,
-    start: MAX_PRICE,
+    start: adPrice.value,
     connect: 'lower',
     format: {
       to: function (value) {
@@ -37,22 +37,15 @@ const createSlider = (fieldPlaceholder) => {
       },
     },
   });
-  updateSlider();
+  sliderElement.noUiSlider.on('slide', onSliderUpdate);
 };
 
-const destroySlider = () => {
-  if (sliderElement.noUiSlider) {
-    sliderElement.noUiSlider.destroy();
-  }
+const updateSlider = (newMinValue) => {
+  sliderElement.noUiSlider.updateOptions({range:{min: newMinValue, max: MAX_PRICE}});
 };
 
-const setSlider = (fieldPlaceholder) => {
-  destroySlider();
-  createSlider(fieldPlaceholder);
-};
+adPrice.addEventListener('input', (evt) => {
+  sliderElement.noUiSlider.set(evt.target.value);
+});
 
-function updateSlider () {
-  sliderElement.noUiSlider.on('update', onSliderUpdate);
-}
-
-export { updateAddressField, setSlider, updateSlider };
+export { updateAddressField, createSlider, updateSlider };

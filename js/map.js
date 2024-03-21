@@ -33,14 +33,7 @@ const startCoordinate = {
 };
 
 let newCoordinate = startCoordinate;
-
-const map = L.map('map-canvas')
-  .on('load', () => {
-    // 'Карта инициализирована'
-    activateForm();
-    // setSlider(adPrice.placeholder);
-  })
-  .setView(cityCenter, ZOOM);
+let map;
 
 const addPinIcon = (icon) => {
   const pinIcon = L.icon({
@@ -50,12 +43,6 @@ const addPinIcon = (icon) => {
   });
   return pinIcon;
 };
-
-const mainPinMarker = L.marker(startCoordinate, {
-  draggable: true,
-  autoPan: true,
-  icon: addPinIcon(mainIconConfig),
-});
 
 const fixedNumberPrecision = (obj) => {
   const values = Object.values(obj);
@@ -83,17 +70,25 @@ const resetMap = () => {
   map.setView(startCoordinate, ZOOM);
 };
 
-mainPinMarker.addTo(map);
+const initMap = () => {
+  map = L.map('map-canvas').setView(cityCenter, ZOOM);
+  activateForm();
+  // main marker
+  L.marker(startCoordinate, {
+    draggable: true,
+    autoPan: true,
+    icon: addPinIcon(mainIconConfig),
+  })
+    .on('moveend', (evt) => {
+      if (evt.target.getLatLng() !== startCoordinate) {
+        newCoordinate = fixedNumberPrecision(evt.target.getLatLng());
+        updateAddressField(newCoordinate);
+      }
+    })
+    .addTo(map);
+  L.tileLayer(TILE_LAYER, {
+    attribution: COPYRIGHT
+  }).addTo(map);
+};
 
-mainPinMarker.on('moveend', (evt) => {
-  if (evt.target.getLatLng() !== startCoordinate) {
-    newCoordinate = fixedNumberPrecision(evt.target.getLatLng());
-    updateAddressField(newCoordinate);
-  }
-});
-
-L.tileLayer(TILE_LAYER, {
-  attribution: COPYRIGHT
-}).addTo(map);
-
-export { resetMap, addPostedMarker };
+export { resetMap, addPostedMarker, initMap };
