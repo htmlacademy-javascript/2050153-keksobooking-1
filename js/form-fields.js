@@ -41,7 +41,7 @@ const createSlider = () => {
 };
 
 const updateSlider = (newMinValue) => {
-  sliderElement.noUiSlider.updateOptions({range:{min: newMinValue, max: MAX_PRICE}});
+  sliderElement.noUiSlider.updateOptions({range:{min: newMinValue, max: MAX_PRICE}, start: adPrice.value});
 };
 
 adPrice.addEventListener('input', (evt) => {

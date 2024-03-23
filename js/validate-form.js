@@ -14,10 +14,14 @@ const SubmitButtonText = {
 
 const minPriceValue = Number(adPrice.placeholder);
 
-const blockSubmitButton = () => {
-  formSubmitButton.disabled = true;
+const resetButton = () => {
   formSubmitButton.textContent = SubmitButtonText.IDLE;
 };
+
+function blockSubmitButton() {
+  formSubmitButton.disabled = true;
+  resetButton();
+}
 
 const unblockSubmitButton = () => {
   formSubmitButton.disabled = false;
@@ -26,9 +30,9 @@ const unblockSubmitButton = () => {
 
 const resetForm = () => {
   pristine.reset();
-  updateSlider(minPriceValue);
   form.reset();
-  formSubmitButton.textContent = SubmitButtonText.IDLE;
+  updateSlider(minPriceValue);
+  resetButton();
 };
 
 const onResetButtonClick = () => {
@@ -61,4 +65,4 @@ const setOnFormSubmit = (callback) => {
   });
 };
 
-export { resetForm, setOnFormSubmit };
+export { resetForm, resetButton, setOnFormSubmit };

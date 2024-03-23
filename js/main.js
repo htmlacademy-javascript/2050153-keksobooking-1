@@ -4,7 +4,7 @@ import { renderCard } from './popup.js';
 import { disableForm, disableFilters, activateFilters } from './form.js';
 import './validate-form-fields.js';
 import { resetForm, setOnFormSubmit } from './validate-form.js';
-import { initMap } from './map.js';
+import { initMap, resetMap } from './map.js';
 import './form-fields.js';
 import { getData, sendData } from './api.js';
 import { showSuccessMessage, showErrorMessage } from './submit-message.js';
@@ -16,8 +16,10 @@ setOnFormSubmit (async (data) => {
     await sendData(data);
     showSuccessMessage();
     resetForm();
+    resetMap();
   } catch {
     showErrorMessage();
+    // resetButton();
   }
 });
 
