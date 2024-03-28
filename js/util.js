@@ -1,4 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
+const DEBOUNCE_DELAY = 500;
 
 // получение случайного числа из диапазона
 const getRandomInteger = (a, b) => {
@@ -57,6 +58,32 @@ const showAlertMessage = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
+// Функция debounce для устранения дребезга взята из интернета и доработана
+// Источник - https://www.freecodecamp.org/news/javascript-debounce-example
+function debounce (callback, timeoutDelay = DEBOUNCE_DELAY) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+// Функция throttle для пропуска кадров взята из интернета и доработана
+// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_throttle
+function throttle (callback, delayBetweenFrames) {
+  let lastTime = 0;
+
+  return (...rest) => {
+    const now = new Date();
+
+    if (now - lastTime >= delayBetweenFrames) {
+      callback.apply(this, rest);
+      lastTime = now;
+    }
+  };
+}
+
 export {
   getRandomInteger,
   getRandomArrayElement,
@@ -64,5 +91,7 @@ export {
   pluralize,
   isEscapeKey,
   isEnterKey,
-  showAlertMessage
+  showAlertMessage,
+  debounce,
+  throttle
 };
