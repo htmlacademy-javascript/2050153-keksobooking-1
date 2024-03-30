@@ -34,6 +34,7 @@ const startCoordinate = {
 
 let newCoordinate = startCoordinate;
 let map;
+let offerMarkers = [];
 
 const addPinIcon = (icon) => {
   const pinIcon = L.icon({
@@ -62,8 +63,16 @@ const addPostedMarker = (location, content) => {
     icon: addPinIcon(postedIconConfig),
   });
 
+  offerMarkers.push(postedPinMarker);
   postedPinMarker.addTo(map);
   postedPinMarker.bindPopup(content);
+};
+
+const clearMarkers = () => {
+  for (const offerMarker of offerMarkers) {
+    offerMarker.remove();
+  }
+  offerMarkers = [];
 };
 
 const resetMap = () => {
@@ -91,4 +100,4 @@ const initMap = () => {
   }).addTo(map);
 };
 
-export { resetMap, addPostedMarker, initMap };
+export { resetMap, addPostedMarker, clearMarkers, initMap };

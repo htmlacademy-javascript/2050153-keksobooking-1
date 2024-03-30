@@ -1,5 +1,8 @@
 import { pluralize } from './util.js';
-import { addPostedMarker } from './map.js';
+import { addPostedMarker, clearMarkers } from './map.js';
+// import { getFilteredOffers } from './map-filters.js';
+
+const MAX_OFFER_COUNT = 10;
 
 const CAPACITY_MESSAGE = {
   roomsForms: [
@@ -19,7 +22,7 @@ const cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.popup');
 
-// находим контейнер для новосозданных карточек, временно
+// находим контейнер для новосозданных карточек
 const cardContainer = document.querySelector('#map-canvas');
 
 // выведение сообщение по количеству комнат и гостей
@@ -103,14 +106,15 @@ const createCard = ({ author, offer, location }) => {
 // удаляем содержимое созданной карты/popup
 const resetCard = () => {
   cardContainer.querySelectorAll('.popup').forEach((element) => element.remove());
+  clearMarkers();
 };
 
 // добавление клонированного предложения в контейнер "#map-canvas", временно
-const renderCard = (offers) => {
+const renderCards = (offers) => {
   resetCard();
   const fragment = document.createDocumentFragment();
 
-  offers.forEach((offer) => {
+  offers.slice(0, MAX_OFFER_COUNT).forEach((offer) => {
     const popupCard = createCard(offer);
     fragment.append(popupCard);
   });
@@ -118,4 +122,4 @@ const renderCard = (offers) => {
   cardContainer.append(fragment);
 };
 
-export { renderCard };
+export { renderCards };
