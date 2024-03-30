@@ -1,170 +1,76 @@
 import { renderCards } from './popup.js';
+import { debounce } from './util.js';
 
-const MAX_OFFER_COUNT = 10;
+const DEFAULT_FILTERS_VALUE = 'any';
 
-const FilterId = {
+const FilterByName = {
   TYPE: 'housing-type',
   PRICE: 'housing-price',
   ROOMS: 'housing-rooms',
   GUESTS: 'housing-guests',
-  FEATURES: 'housing-features'
+  FEATURES: 'features'
 };
 
-let offers = [];
-let currentFilterId;
+const FilterPriceRangeValue = {
+  'low': [0, 10000],
+  'middle': [10000, 50000],
+  'high': [50000, 100000]
+};
 
 const filtersForm = document.querySelector('.map__filters');
-// const filter = filters.querySelectorAll('.img-filter');
 
-// фильтрация по имени(value) фильтра
-const getFilterByName = (name, changedValue) => {
+// используеться для проверки активного фильтра
+const isActive = (value) => value !== DEFAULT_FILTERS_VALUE;
+
+// фильтрация по имени фильтра и по его значению
+const getFilterByName = (name, value) => {
   switch (name) {
-    case FilterId.TYPE:
-      return (item) => item.Id === changedValue;
-    // case FilterId.PRICE:
-    //   return
-  }
-};
-
-// фильтрация для выпадашек
-// фильтрация по типу жилья
-const sortByType = (loadedOffers) => {
-  // const filteredOffers = [];
-  // console.log(loadedOffer);
-  // const filteredObj = Object.fromEntries(
-  //   Object.entries(uploadOffer).filter(([key, value]) => {
-  //     console.log(key);
-  //     console.log(value);
-      // if (value === OfferByType.value) {
-      //   console.log(value);
-      //   return uploadOffer;
-        // filteredOffers.push(offer);
-      // }
-      // })
-      // console.log(loadedOffer.offer.type);
-      // console.log(filterValue.value);
-      // if (loadedOffer.offer.type === filterValue[OfferByType.value]) {
-      // //   // console.log(value);
-      //   filteredOffers.push(loadedOffer);
-      // }
-  // );
-  // uploadOffers.forEach((offer) => {
-  //   // if (offer.type.includes(OfferByType.DEFAULT)) {
-  //   //   return offer;
-  //   // } else
-  //   console.log(uploadOffers);
-    // if (uploadOffer[offer.type.value] === OfferByType.value) {
-    //   console.log(offer.type);
-    //   return uploadOffer;
-    //   // filteredOffers.push(offer);
-    // }
-  // });
-  // return filteredOffers.slise(0, MAX_OFFER_COUNT);
-  let result = [...loadedOffers];
-  result = result.filter(getFilterByName());
-  return result;
-};
-
-// // фильтрация по стоимости жилья
-// const filterOffersByPrice = () => {
-//   const filteredOffers = [];
-//   offers.forEach((offer) => {
-//     if (offer.value.includes(OfferByType.value)) {
-//       filteredOffers.push(offer);
-//     }
-//   });
-//   return filteredOffers;
-// };
-
-
-// const compareCommentsLength = (pictureA, pictureB) => pictureB.comments.length - pictureA.comments.length;
-
-// const getFeaturesRank = (features) => {
-//   let rank = 0;
-
-//   // const randomCards = [];
-//   // while (randomCards.length < MAX_CARD_COUNT) {
-//   //   const housingCard = getRandomArrayElement(uploadCards);
-//   //   if (!randomCards.includes(housingCard)) {
-//   //     randomCards.push(housingCard);
-//   //   }
-//   // }
-//   // return randomCards;
-// };
-
-
-// функция применения нужного фильтра к предложениям по съему жилья
-// [...offers] - делает поверхностное копирование всего масива с предложениями который пришел с сервера.
-// Поверхностное копирование потомучто, мы будем изменять только порядок ссылок на массив данных, сами данные внутри мы менять не будем.
-const getFilteredOffers = () => {
-  switch (currentFilterId) {
-    case FilterId.TYPE:
-      return [...offers].sort(sortByType).slise(0, MAX_OFFER_COUNT);
-    case FilterId.PRICE:
-      return [...offers].sort(sortByPrice).slise(0, MAX_OFFER_COUNT);
-    default: {
-      // offers = Array.prototype.slice.call([...offers], 0, MAX_OFFER_COUNT);
-      return offers;
+    case FilterByName.TYPE: {
+      return (item) => item.offer.type === value;
+    }
+    case FilterByName.PRICE: {
+      const [min, max] = FilterPriceRangeValue[value];
+      return (item) => min <= item.offer.price && item.offer.price < max;
+    }
+    case FilterByName.ROOMS: {
+      return (item) => item.offer.rooms === Number(value);
+    }
+    case FilterByName.GUESTS: {
+      return (item) => item.offer.guests === Number(value);
+    }
+    case FilterByName.FEATURES: {
+      return (item) => {
+        if (item.offer.features === undefined) {
+          return false;
+        }
+        return item.offer.features.includes(value);
+      };
     }
   }
-}
-// const getFilteredOffers = () => {
-  // filters.addEventListener('change', (evt) => {
-  //   const changedFilter = evt.target;
-  //   console.log(changedFilter);
+};
 
-  //   currentFilterId = changedFilter.id;
-  //   console.log(currentFilterId);
-  //   if (changedFilter.id === currentFilterId) {
-  //     return;
-  //   }
-    // if (currentFilterId === FilterId.TYPE) {
-    //   return filterOffersByType(offers);
-    // }
-  // if (currentFilterId === FilterId.PRICE) {
-  //   return [...pictures].sort(compareCommentsLength);
-  // }
-  // if (currentFilterId === FilterId.ROOMS) {
-  //   return [...pictures].sort(compareCommentsLength);
-  // }
-  // if (currentFilterId === FilterId.GUESTS) {
-  //   return [...pictures].sort(compareCommentsLength);
-  // }
-  // if (currentFilterId === FilterId.FEATURES) {
-  //   return [...pictures].sort(compareCommentsLength);
-  // }
-  // if (currentFilterId === FilterId.DEFAULT) {
-  //   return [...offers];
-  // });
-// };
+const renderCardsDebounced = debounce(renderCards);
 
-// // функция нажатия на кнопки с фильрами
-const setOnChangeFilters = () => {
-  filtersForm.addEventListener('change', () => {
-    // получаем значения из фильтров и исключаем дефолтные
-    const changedFilters = [...new FormData(filtersForm).entries()]
-      .filter(([key, value]) => value !== 'any');
-    console.log(changedFilters);
-    let result = [...offers];
-    console.log(result);
-    for (const changedFilter of changedFilters) {
-      console.log(changedFilter);
-      const [name, currentFilterValue] = changedFilter;
-      result = result.filter(getFilterByName(name, currentFilterValue));
-      console.log(result);
+// функция срабатываемая при нажатия на кнопки с фильрами
+const setOnChangeFilters = (offers) => {
+  // получаем значения из фильтров
+  const changedFilters = new FormData(filtersForm);
+  // получаем значения из предложений
+  let filteredOffers = [...offers];
+  // фильтрация по имени и значению фильтра
+  for (const entry of changedFilters.entries()) {
+    const [ filterName, filterValue ] = entry;
+    if (isActive(filterValue)) {
+      filteredOffers = filteredOffers.filter(getFilterByName(filterName, filterValue));
     }
-    result.slice(0, MAX_OFFER_COUNT);
-    renderCards(result);
-    // console.log(currentFilterId);
-    // cb(getFilteredOffers());
-  });
+  }
+  // переписываем видимые предложения согласно фильтрации
+  renderCardsDebounced(filteredOffers);
 };
 
-// функция инициализации фильтров для загружаемых фотографий
-const initOfferFilters = (loadedOffers, cb) => {
-  offers = [...loadedOffers];
-  setOnChangeFilters(cb);
+// функция инициализации фильтров для загружаемых предложений
+const initializeOfferFilters = (offers) => {
+  filtersForm.addEventListener('change', () => setOnChangeFilters(offers));
 };
 
-
-export { getFilteredOffers, initOfferFilters };
+export { initializeOfferFilters };

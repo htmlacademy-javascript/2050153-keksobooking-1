@@ -1,8 +1,8 @@
 import { pluralize } from './util.js';
-import { addPostedMarker } from './map.js';
+import { addPostedMarker, clearMarkers } from './map.js';
 // import { getFilteredOffers } from './map-filters.js';
 
-// const MAX_OFFER_COUNT = 10;
+const MAX_OFFER_COUNT = 10;
 
 const CAPACITY_MESSAGE = {
   roomsForms: [
@@ -106,20 +106,18 @@ const createCard = ({ author, offer, location }) => {
 // удаляем содержимое созданной карты/popup
 const resetCard = () => {
   cardContainer.querySelectorAll('.popup').forEach((element) => element.remove());
+  clearMarkers();
 };
 
 // добавление клонированного предложения в контейнер "#map-canvas", временно
 const renderCards = (offers) => {
   resetCard();
   const fragment = document.createDocumentFragment();
-  console.log(offers);
 
-  offers
-    .forEach((offer) => {
-      console.log(offer);
-      const popupCard = createCard(offer);
-      fragment.append(popupCard);
-    });
+  offers.slice(0, MAX_OFFER_COUNT).forEach((offer) => {
+    const popupCard = createCard(offer);
+    fragment.append(popupCard);
+  });
 
   cardContainer.append(fragment);
 };
