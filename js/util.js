@@ -1,22 +1,22 @@
 const ALERT_SHOW_TIME = 5000;
 const DEBOUNCE_DELAY = 500;
 
-// получение случайного числа из диапазона
-const getRandomInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
+// // получение случайного числа из диапазона
+// const getRandomInteger = (a, b) => {
+//   const lower = Math.ceil(Math.min(a, b));
+//   const upper = Math.floor(Math.max(a, b));
+//   const result = Math.random() * (upper - lower + 1) + lower;
+//   return Math.floor(result);
+// };
 
-// получение случайного значения из массива
-const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
+// // получение случайного значения из массива
+// const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-// получение массива случайной длины из значений
-const getArrayFromRandomElements = (chosenArrey) => Array.from(
-  { length: getRandomInteger(0, chosenArrey.length - 1) },
-  () => getRandomArrayElement(chosenArrey),
-);
+// // получение массива случайной длины из значений
+// const getArrayFromRandomElements = (chosenArrey) => Array.from(
+//   { length: getRandomInteger(0, chosenArrey.length - 1) },
+//   () => getRandomArrayElement(chosenArrey),
+// );
 
 // поиск окончаний "сообщения" в зависимости от количества. Стандартная функция.
 // get from: https://mihaly4.ru/plural-ili-mnozhestvennoe-chislo-slov-v-js;
@@ -60,38 +60,22 @@ const showAlertMessage = (message) => {
 
 // Функция debounce для устранения дребезга взята из интернета и доработана
 // Источник - https://www.freecodecamp.org/news/javascript-debounce-example
-function debounce (callback, timeoutDelay = DEBOUNCE_DELAY) {
+const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   let timeoutId;
 
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
-
-// Функция throttle для пропуска кадров взята из интернета и доработана
-// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_throttle
-function throttle (callback, delayBetweenFrames) {
-  let lastTime = 0;
-
-  return (...rest) => {
-    const now = new Date();
-
-    if (now - lastTime >= delayBetweenFrames) {
-      callback.apply(this, rest);
-      lastTime = now;
-    }
-  };
-}
+};
 
 export {
-  getRandomInteger,
-  getRandomArrayElement,
-  getArrayFromRandomElements,
+  // getRandomInteger,
+  // getRandomArrayElement,
+  // getArrayFromRandomElements,
   pluralize,
   isEscapeKey,
   isEnterKey,
   showAlertMessage,
   debounce,
-  throttle
 };
