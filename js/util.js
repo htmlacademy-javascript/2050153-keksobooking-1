@@ -1,23 +1,6 @@
 const ALERT_SHOW_TIME = 5000;
 const DEBOUNCE_DELAY = 500;
 
-// // получение случайного числа из диапазона
-// const getRandomInteger = (a, b) => {
-//   const lower = Math.ceil(Math.min(a, b));
-//   const upper = Math.floor(Math.max(a, b));
-//   const result = Math.random() * (upper - lower + 1) + lower;
-//   return Math.floor(result);
-// };
-
-// // получение случайного значения из массива
-// const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
-
-// // получение массива случайной длины из значений
-// const getArrayFromRandomElements = (chosenArrey) => Array.from(
-//   { length: getRandomInteger(0, chosenArrey.length - 1) },
-//   () => getRandomArrayElement(chosenArrey),
-// );
-
 // поиск окончаний "сообщения" в зависимости от количества. Стандартная функция.
 // get from: https://mihaly4.ru/plural-ili-mnozhestvennoe-chislo-slov-v-js;
 const pluralize = (forms, n) => {
@@ -37,21 +20,34 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const isEnterKey = (evt) => evt.key === 'Enter';
 
-const showAlertMessage = (message) => {
+const showAlertMessage = (message, messageContainer) => {
   const alertMessage = document.createElement('div');
-  alertMessage.style.zIndex = '1000';
-  alertMessage.style.position = 'absolute';
-  alertMessage.style.height = 'max-content';
-  alertMessage.style.left = '0';
-  alertMessage.style.right = '0';
-  alertMessage.style.top = '40%';
-  alertMessage.style.padding = '10px 3px';
-  alertMessage.style.fontSize = '30px';
-  alertMessage.style.textAlign = 'center';
-  alertMessage.style.backgroundColor = 'rgb(255, 0, 0, 0.5)';
+  if (messageContainer) {
+    alertMessage.style.zIndex = '1000';
+    alertMessage.style.position = 'absolute';
+    alertMessage.style.padding = '4px';
+    alertMessage.style.fontSize = '12px';
+    alertMessage.style.textAlign = 'center';
+    alertMessage.style.backgroundColor = 'rgb(255, 0, 0, 0.8)';
 
-  alertMessage.textContent = message;
-  document.body.append(alertMessage);
+    alertMessage.textContent = message;
+    messageContainer.append(alertMessage);
+  } else {
+    // const alertMessage = document.createElement('div');
+    alertMessage.style.zIndex = '1000';
+    alertMessage.style.position = 'absolute';
+    alertMessage.style.height = 'max-content';
+    alertMessage.style.left = '0';
+    alertMessage.style.right = '0';
+    alertMessage.style.top = '40%';
+    alertMessage.style.padding = '10px 3px';
+    alertMessage.style.fontSize = '30px';
+    alertMessage.style.textAlign = 'center';
+    alertMessage.style.backgroundColor = 'rgb(255, 0, 0, 0.5)';
+
+    alertMessage.textContent = message;
+    document.body.append(alertMessage);
+  }
 
   setTimeout(() => {
     alertMessage.remove();
@@ -70,9 +66,6 @@ const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
 };
 
 export {
-  // getRandomInteger,
-  // getRandomArrayElement,
-  // getArrayFromRandomElements,
   pluralize,
   isEscapeKey,
   isEnterKey,
