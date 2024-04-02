@@ -20,6 +20,15 @@ const CAPACITY_MESSAGE = {
   ]
 };
 
+const PriceByPropertyType = {
+  bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000
+};
+
+
 const form = document.querySelector('.ad-form');
 const adTitle = form.querySelector('#title');
 const adPrice = form.querySelector('#price');
@@ -28,14 +37,6 @@ const adRoomNumber = form.querySelector('#room_number');
 const adCapacity = form.querySelector('#capacity');
 const adTimeOut = form.querySelector('#timeout');
 const adTimeIn = form.querySelector('#timein');
-
-const PriceByPropertyType = {
-  bungalow: 0,
-  flat: 1000,
-  hotel: 3000,
-  house: 5000,
-  palace: 10000
-};
 
 let minPrice = PriceByPropertyType[houseType.value];
 
@@ -83,10 +84,7 @@ const validateAdPriceAmount = (priceField) =>
 const getErrorMessageAdPrice = () =>
   `Цена за ночь не должна привышать ${ MAX_PRICE } руб. и быть не менее ${ minPrice } руб.`;
 
-/*
-Поле «Количество комнат» синхронизировано с полем «Количество мест» таким образом,
-что при выборе количества комнат вводятся ограничения на допустимые варианты выбора количества гостей.
-*/
+// Поле «Количество комнат» синхронизировано с полем «Количество мест»
 const validateAdRooms = (value) => {
   const capacity = Number(adCapacity.value);
   const rooms = Number(value);

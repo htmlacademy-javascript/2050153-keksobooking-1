@@ -18,8 +18,6 @@ const pluralize = (forms, n) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const isEnterKey = (evt) => evt.key === 'Enter';
-
 const showAlertMessage = (message, messageContainer) => {
   const alertMessage = document.createElement('div');
   if (messageContainer) {
@@ -29,11 +27,7 @@ const showAlertMessage = (message, messageContainer) => {
     alertMessage.style.fontSize = '12px';
     alertMessage.style.textAlign = 'center';
     alertMessage.style.backgroundColor = 'rgb(255, 0, 0, 0.8)';
-
-    alertMessage.textContent = message;
-    messageContainer.append(alertMessage);
   } else {
-    // const alertMessage = document.createElement('div');
     alertMessage.style.zIndex = '1000';
     alertMessage.style.position = 'absolute';
     alertMessage.style.height = 'max-content';
@@ -44,10 +38,9 @@ const showAlertMessage = (message, messageContainer) => {
     alertMessage.style.fontSize = '30px';
     alertMessage.style.textAlign = 'center';
     alertMessage.style.backgroundColor = 'rgb(255, 0, 0, 0.5)';
-
-    alertMessage.textContent = message;
-    document.body.append(alertMessage);
   }
+  alertMessage.textContent = message;
+  messageContainer.append(alertMessage);
 
   setTimeout(() => {
     alertMessage.remove();
@@ -68,7 +61,6 @@ const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
 export {
   pluralize,
   isEscapeKey,
-  isEnterKey,
   showAlertMessage,
   debounce,
 };

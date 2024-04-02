@@ -13,6 +13,7 @@ const adPhotoDropZone = form.querySelector('.ad-form__upload');
 const adPhotoInput = form.querySelector('.ad-form__input');
 const adPhotoPreviewField = form.querySelector('.ad-form__photo');
 
+adPrice.value = adPrice.placeholder;
 
 // поле адреса
 const updateAddressField = (coordinateObj) => {
@@ -22,8 +23,6 @@ const updateAddressField = (coordinateObj) => {
 
 // поле цены
 // реализация слайдера для цены, используем noUiSlider
-adPrice.value = adPrice.placeholder;
-
 const onSliderUpdate = () => {
   adPrice.value = sliderElement.noUiSlider.get();
 };
@@ -57,18 +56,19 @@ adPrice.addEventListener('input', (evt) => {
   sliderElement.noUiSlider.set(evt.target.value);
 });
 
+// поля с загрузками фотографий
 // проверка файла с фотографией для загрузки
 const validateFile = (file, dropZone) => {
   const allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
   const fileExtension = file.type.split('/')[1];
   const isValidFile = allowedExtensions.includes(fileExtension);
   if (!isValidFile) {
-    // throw new Error(`Подходящий формат файла: *.${ allowedExtensions.join(', *.')}`);
     showAlertMessage(`Подходящий формат Фотографии: *.${ allowedExtensions.join(', *.')}`, dropZone);
   }
   return isValidFile;
 };
 
+// добавление изображения в поле предпросмотра
 const addNewImgPreview = (file, imgInput, imgDropZone, imgPreview) => {
   if (validateFile(file[0], imgDropZone)) {
     const newImg = document.createElement('img');
@@ -88,6 +88,7 @@ const addNewImgPreview = (file, imgInput, imgDropZone, imgPreview) => {
   }
 };
 
+// реализация предпросмотра фотографии при изменении поля для загрузки
 const onImgUploadChange = (imgInput, imgDropZone, imgPreview) => {
   // при нажатии на загрузку
   imgInput.addEventListener('change', (evt) => {
@@ -112,6 +113,7 @@ const onImgUploadChange = (imgInput, imgDropZone, imgPreview) => {
   });
 };
 
+// удаление загруженной фотографии из предпросмотра
 const removePreviewImg = (imgPreview) => {
   const selectedImg = document.querySelector('#selected-img');
   if (imgPreview.contains(selectedImg)) {
@@ -122,6 +124,7 @@ const removePreviewImg = (imgPreview) => {
   }
 };
 
+// предпросмотр фотографии в зависимости от поля загрузки
 const previewImgAvatar = () => onImgUploadChange(formFieldAvatarInput, formFieldAvatarDropZone, avatarImgPreviewField);
 
 const previewImgAdPhoto = () => onImgUploadChange(adPhotoInput, adPhotoDropZone, adPhotoPreviewField);

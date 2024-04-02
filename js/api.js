@@ -1,4 +1,3 @@
-// без data это POST
 const BASE_URL = 'https://28.javascript.htmlacademy.pro/keksobooking';
 
 const Route = {

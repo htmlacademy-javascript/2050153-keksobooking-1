@@ -18,6 +18,9 @@ const FilterPriceRangeValue = {
 };
 
 const filtersForm = document.querySelector('.map__filters');
+const filters = filtersForm.querySelectorAll('.map__filter');
+const feachers = filtersForm.querySelector('.map__features');
+const feachersCheckboxes = feachers.querySelectorAll('input[name="features"]');
 
 // используеться для проверки активного фильтра
 const isActive = (value) => value !== DEFAULT_FILTERS_VALUE;
@@ -68,9 +71,22 @@ const setOnChangeFilters = (offers) => {
   renderCardsDebounced(filteredOffers);
 };
 
+const resetFilters = () => {
+  filters.forEach((filter) => {
+    if (isActive) {
+      filter.value = DEFAULT_FILTERS_VALUE;
+    }
+  });
+  feachersCheckboxes.forEach((feacher) => {
+    if (feacher.checked) {
+      feacher.checked = false;
+    }
+  });
+};
+
 // функция инициализации фильтров для загружаемых предложений
 const initializeOfferFilters = (offers) => {
   filtersForm.addEventListener('change', () => setOnChangeFilters(offers));
 };
 
-export { initializeOfferFilters };
+export { initializeOfferFilters, resetFilters };

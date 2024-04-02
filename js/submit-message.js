@@ -1,5 +1,5 @@
 import { isEscapeKey } from './util.js';
-import { resetButton } from './validate-form.js';
+import { resetButton } from './form.js';
 // import { resetMap } from './map.js';
 
 // находим template '#error'

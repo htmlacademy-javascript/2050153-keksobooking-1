@@ -1,4 +1,4 @@
-import { activateForm } from './form.js';
+import { activateForm } from './activation.js';
 import { updateAddressField } from './form-fields.js';
 
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
