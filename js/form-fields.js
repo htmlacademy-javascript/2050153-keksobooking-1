@@ -73,6 +73,7 @@ const addNewImgPreview = (file, imgInput, imgDropZone, imgPreview) => {
   if (validateFile(file[0], imgDropZone)) {
     const newImg = document.createElement('img');
     newImg.src = URL.createObjectURL(file[0]);
+    newImg.setAttribute('id', 'selected-img');
     if (imgInput.id === 'avatar') {
       newImg.width = '40';
       newImg.maxHeight = '40';
@@ -80,12 +81,14 @@ const addNewImgPreview = (file, imgInput, imgDropZone, imgPreview) => {
       newImg.maxWidth = '70';
       newImg.height = '70';
     }
-    imgPreview.innerHTML = '';
+    for (const child of imgPreview.children) {
+      child.classList.add('visually-hidden');
+    }
     imgPreview.append(newImg);
   }
 };
 
-const onImgUpploadChange = (imgInput, imgDropZone, imgPreview) => {
+const onImgUploadChange = (imgInput, imgDropZone, imgPreview) => {
   // при нажатии на загрузку
   imgInput.addEventListener('change', (evt) => {
     evt.preventDefault();
@@ -109,11 +112,21 @@ const onImgUpploadChange = (imgInput, imgDropZone, imgPreview) => {
   });
 };
 
-const previewImgAvatar = () => onImgUpploadChange(formFieldAvatarInput, formFieldAvatarDropZone, avatarImgPreviewField);
+const removePreviewImg = (imgPreview) => {
+  const selectedImg = document.querySelector('#selected-img');
+  if (imgPreview.contains(selectedImg)) {
+    selectedImg.remove();
+    if (imgPreview === avatarImgPreviewField) {
+      imgPreview.querySelector('.visually-hidden').classList.remove('visually-hidden');
+    }
+  }
+};
 
-const previewImgAdPhoto = () => onImgUpploadChange(adPhotoInput, adPhotoDropZone, adPhotoPreviewField);
+const previewImgAvatar = () => onImgUploadChange(formFieldAvatarInput, formFieldAvatarDropZone, avatarImgPreviewField);
+
+const previewImgAdPhoto = () => onImgUploadChange(adPhotoInput, adPhotoDropZone, adPhotoPreviewField);
 
 previewImgAvatar();
 previewImgAdPhoto();
 
-export { updateAddressField, createSlider, updateSlider };
+export { updateAddressField, createSlider, updateSlider, removePreviewImg };

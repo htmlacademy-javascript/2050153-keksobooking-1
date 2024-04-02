@@ -86,7 +86,6 @@ const addPhotosToContainer = (photos, photoContainer, photosContainer) => {
   }
 };
 
-
 // создание клонированого предложения(карточки) по шаблону
 const createCard = ({ author, offer, location }) => {
   const card = cardTemplate.cloneNode(true);
@@ -124,15 +123,10 @@ const resetCard = () => {
   clearMarkers();
 };
 
-// добавление клонированного предложения в контейнер "#map-canvas", временно
+// добавление предложений
 const renderCards = (offers) => {
   resetCard();
-  const fragment = document.createDocumentFragment();
-
-  offers.slice(0, MAX_OFFER_COUNT).forEach((offer) => {
-    const popupCard = createCard(offer);
-    fragment.append(popupCard);
-  });
+  offers.slice(0, MAX_OFFER_COUNT).forEach(createCard);
 };
 
 export { renderCards };

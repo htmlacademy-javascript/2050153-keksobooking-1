@@ -1,11 +1,13 @@
 import { pristine } from './validate-form-fields.js';
 import { resetMap } from './map.js';
-import { updateSlider } from './form-fields.js';
+import { updateSlider, removePreviewImg } from './form-fields.js';
 
 const form = document.querySelector('.ad-form');
 const adPrice = form.querySelector('#price');
 const formSubmitButton = form.querySelector('.ad-form__submit');
 const formResetButton = form.querySelector('.ad-form__reset');
+const adPhotoPreviewField = form.querySelector('.ad-form__photo');
+const avatarImgPreviewField = form.querySelector('.ad-form-header__preview');
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -33,6 +35,8 @@ const resetForm = () => {
   form.reset();
   updateSlider(minPriceValue);
   resetButton();
+  removePreviewImg(avatarImgPreviewField);
+  removePreviewImg(adPhotoPreviewField);
 };
 
 const onResetButtonClick = () => {

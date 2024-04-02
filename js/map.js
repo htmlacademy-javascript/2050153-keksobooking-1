@@ -35,6 +35,7 @@ const startCoordinate = {
 let newCoordinate = startCoordinate;
 let map;
 let offerMarkers = [];
+let mainMarker;
 
 const addPinIcon = (icon) => {
   const pinIcon = L.icon({
@@ -77,13 +78,14 @@ const clearMarkers = () => {
 
 const resetMap = () => {
   map.setView(startCoordinate, ZOOM);
+  mainMarker.setLatLng(startCoordinate);
 };
 
 const initMap = () => {
   map = L.map('map-canvas').setView(cityCenter, ZOOM);
   activateForm();
   // main marker
-  L.marker(startCoordinate, {
+  mainMarker = L.marker(startCoordinate, {
     draggable: true,
     autoPan: true,
     icon: addPinIcon(mainIconConfig),
