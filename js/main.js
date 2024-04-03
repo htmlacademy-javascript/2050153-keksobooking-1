@@ -31,6 +31,5 @@ try {
   activateFilters();
   initializeOfferFilters(data);
 } catch (err) {
-  // console.error(err);
   showAlertMessage(err.message);
 }

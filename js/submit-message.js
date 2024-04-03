@@ -1,6 +1,5 @@
 import { isEscapeKey } from './util.js';
 import { resetButton } from './form.js';
-// import { resetMap } from './map.js';
 
 // находим template '#error'
 const errorMessage = document.querySelector('#error')

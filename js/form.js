@@ -1,12 +1,13 @@
 import { pristine } from './validate-form-fields.js';
 import { resetMap } from './map.js';
 import { updateSlider, removePreviewImg } from './form-fields.js';
+import { resetFilters } from './map-filters.js';
 
 const form = document.querySelector('.ad-form');
-const adPrice = form.querySelector('#price');
+const formFieldPrice = form.querySelector('#price');
 const formSubmitButton = form.querySelector('.ad-form__submit');
 const formResetButton = form.querySelector('.ad-form__reset');
-const adPhotoPreviewField = form.querySelector('.ad-form__photo');
+const imgPreviewField = form.querySelector('.ad-form__photo');
 const avatarImgPreviewField = form.querySelector('.ad-form-header__preview');
 
 const SubmitButtonText = {
@@ -14,7 +15,7 @@ const SubmitButtonText = {
   SENDING: 'Публикую...'
 };
 
-const minPriceValue = Number(adPrice.placeholder);
+const minPriceValue = Number(formFieldPrice.placeholder);
 
 const resetButton = () => {
   formSubmitButton.textContent = SubmitButtonText.IDLE;
@@ -36,12 +37,13 @@ const resetForm = () => {
   updateSlider(minPriceValue);
   resetButton();
   removePreviewImg(avatarImgPreviewField);
-  removePreviewImg(adPhotoPreviewField);
+  removePreviewImg(imgPreviewField);
 };
 
 const onResetButtonClick = () => {
   resetForm();
   resetMap();
+  resetFilters();
 };
 
 formResetButton.addEventListener('click', onResetButtonClick);

@@ -12,15 +12,12 @@ const FilterByName = {
 };
 
 const FilterPriceRangeValue = {
-  'low': [0, 10000],
-  'middle': [10000, 50000],
-  'high': [50000, 100000]
+  low: [0, 10000],
+  middle: [10000, 50000],
+  high: [50000, 100000]
 };
 
 const filtersForm = document.querySelector('.map__filters');
-const filters = filtersForm.querySelectorAll('.map__filter');
-const feachers = filtersForm.querySelector('.map__features');
-const feachersCheckboxes = feachers.querySelectorAll('input[name="features"]');
 
 // используеться для проверки активного фильтра
 const isActive = (value) => value !== DEFAULT_FILTERS_VALUE;
@@ -72,21 +69,13 @@ const setOnChangeFilters = (offers) => {
 };
 
 const resetFilters = () => {
-  filters.forEach((filter) => {
-    if (isActive) {
-      filter.value = DEFAULT_FILTERS_VALUE;
-    }
-  });
-  feachersCheckboxes.forEach((feacher) => {
-    if (feacher.checked) {
-      feacher.checked = false;
-    }
-  });
+  filtersForm.reset();
 };
 
 // функция инициализации фильтров для загружаемых предложений
 const initializeOfferFilters = (offers) => {
   filtersForm.addEventListener('change', () => setOnChangeFilters(offers));
+  filtersForm.addEventListener('reset', () => renderCards(offers));
 };
 
 export { initializeOfferFilters, resetFilters };

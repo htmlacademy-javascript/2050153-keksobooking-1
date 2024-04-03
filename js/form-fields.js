@@ -4,16 +4,16 @@ const MAX_PRICE = 100000;
 
 const form = document.querySelector('.ad-form');
 const formFieldAddress = form.querySelector('#address');
-const adPrice = form.querySelector('#price');
+const formFieldPrice = form.querySelector('#price');
 const sliderElement = form.querySelector('.ad-form__slider');
 const formFieldAvatarInput = form.querySelector('.ad-form-header__input');
 const formFieldAvatarDropZone = form.querySelector('.ad-form__field');
 const avatarImgPreviewField = form.querySelector('.ad-form-header__preview');
-const adPhotoDropZone = form.querySelector('.ad-form__upload');
-const adPhotoInput = form.querySelector('.ad-form__input');
-const adPhotoPreviewField = form.querySelector('.ad-form__photo');
+const formFieldImgDropZone = form.querySelector('.ad-form__upload');
+const formFieldImgInput = form.querySelector('.ad-form__input');
+const imgPreviewField = form.querySelector('.ad-form__photo');
 
-adPrice.value = adPrice.placeholder;
+formFieldPrice.value = formFieldPrice.placeholder;
 
 // поле адреса
 const updateAddressField = (coordinateObj) => {
@@ -24,17 +24,17 @@ const updateAddressField = (coordinateObj) => {
 // поле цены
 // реализация слайдера для цены, используем noUiSlider
 const onSliderUpdate = () => {
-  adPrice.value = sliderElement.noUiSlider.get();
+  formFieldPrice.value = sliderElement.noUiSlider.get();
 };
 
 const createSlider = () => {
   noUiSlider.create(sliderElement, {
     range: {
-      min: Number(adPrice.placeholder),
+      min: Number(formFieldPrice.placeholder),
       max: MAX_PRICE
     },
     step: 1,
-    start: adPrice.value,
+    start: formFieldPrice.value,
     connect: 'lower',
     format: {
       to: function (value) {
@@ -49,10 +49,10 @@ const createSlider = () => {
 };
 
 const updateSlider = (newMinValue) => {
-  sliderElement.noUiSlider.updateOptions({range:{min: newMinValue, max: MAX_PRICE}, start: adPrice.value});
+  sliderElement.noUiSlider.updateOptions({range:{min: newMinValue, max: MAX_PRICE}, start: formFieldPrice.value});
 };
 
-adPrice.addEventListener('input', (evt) => {
+formFieldPrice.addEventListener('input', (evt) => {
   sliderElement.noUiSlider.set(evt.target.value);
 });
 
@@ -127,7 +127,7 @@ const removePreviewImg = (imgPreview) => {
 // предпросмотр фотографии в зависимости от поля загрузки
 const previewImgAvatar = () => onImgUploadChange(formFieldAvatarInput, formFieldAvatarDropZone, avatarImgPreviewField);
 
-const previewImgAdPhoto = () => onImgUploadChange(adPhotoInput, adPhotoDropZone, adPhotoPreviewField);
+const previewImgAdPhoto = () => onImgUploadChange(formFieldImgInput, formFieldImgDropZone, imgPreviewField);
 
 previewImgAvatar();
 previewImgAdPhoto();
