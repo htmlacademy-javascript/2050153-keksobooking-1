@@ -54,11 +54,11 @@ const renderCardsDebounced = debounce(renderCards);
 // функция срабатываемая при нажатия на кнопки с фильрами
 const setOnChangeFilters = (offers) => {
   // получаем значения из фильтров
-  const changedFilters = new FormData(filtersForm);
+  const filtersData = new FormData(filtersForm);
   // получаем значения из предложений
   let filteredOffers = [...offers];
   // фильтрация по имени и значению фильтра
-  for (const entry of changedFilters.entries()) {
+  for (const entry of filtersData.entries()) {
     const [ filterName, filterValue ] = entry;
     if (isActive(filterValue)) {
       filteredOffers = filteredOffers.filter(getFilterByName(filterName, filterValue));

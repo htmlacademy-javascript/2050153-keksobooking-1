@@ -39,6 +39,9 @@ function closeMessage() {
   resetSubmitButton();
 }
 
+// закрытие сообщения при клике
+const onMessageClose = () => closeMessage();
+
 // функция показа сообщения
 const showMessage = (messageElement) => {
   body.append(messageElement);
@@ -47,7 +50,7 @@ const showMessage = (messageElement) => {
   if (messageElement === errorMessage) {
     messageElement
       .querySelector('.error__button')
-      .addEventListener('click', closeMessage);
+      .addEventListener('click', onMessageClose);
   }
 };
 

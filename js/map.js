@@ -46,12 +46,12 @@ const addPinIcon = (icon) => {
   return pinIcon;
 };
 
-const fixedNumberPrecision = (obj) => {
-  const values = Object.values(obj);
+const getValuePrecision = (obj) => {
+  const valuesObj = Object.values(obj);
   const result = [];
-  values.forEach((value) => {
-    const fixedValue = Number((value).toFixed(LOCATION_PRECISION));
-    result.push(fixedValue);
+  valuesObj.forEach((value) => {
+    const preciseValue = Number((value).toFixed(LOCATION_PRECISION));
+    result.push(preciseValue);
   });
   obj.lat = result[0];
   obj.lng = result[1];
@@ -94,7 +94,7 @@ const initMap = () => {
   })
     .on('moveend', (evt) => {
       if (evt.target.getLatLng() !== startCoordinate) {
-        newCoordinate = fixedNumberPrecision(evt.target.getLatLng());
+        newCoordinate = getValuePrecision(evt.target.getLatLng());
         updateAddressField(newCoordinate);
       }
     })

@@ -99,19 +99,19 @@ const createCard = ({ author, offer, location }) => {
   checkCard(card, offer.checkin, '.popup__text--time', 'textContent', `Заезд после ${ offer.checkin }, выезд до ${ offer.checkout }`);
   checkCard(card, offer.description, '.popup__description', 'textContent');
 
-  const cardFeatures = card.querySelector('.popup__features');
-  const featuresList = cardFeatures.querySelectorAll('.popup__feature');
+  const featuresListElement = card.querySelector('.popup__features');
+  const featuresList = featuresListElement.querySelectorAll('.popup__feature');
 
   if (typeof offer.features === 'undefined') {
-    cardFeatures.style.display = 'none';
+    featuresListElement.style.display = 'none';
   } else {
     filterFeatures(offer.features, featuresList);
   }
 
-  const cardPhotos = card.querySelector('.popup__photos');
+  const cardPhotosListElement = card.querySelector('.popup__photos');
   const cardPhoto = card.querySelector('.popup__photo');
 
-  addPhotosToContainer(offer.photos, cardPhoto, cardPhotos);
+  addPhotosToContainer(offer.photos, cardPhoto, cardPhotosListElement);
 
   addPostedMarker(location, card);
   return card;

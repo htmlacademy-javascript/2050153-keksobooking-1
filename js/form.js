@@ -18,10 +18,10 @@ const resetSubmitButton = () => {
   formSubmitButton.textContent = SubmitButtonText.IDLE;
 };
 
-function blockSubmitButton() {
+const blockSubmitButton = () => {
   formSubmitButton.disabled = true;
   resetSubmitButton();
-}
+};
 
 const unblockSubmitButton = () => {
   formSubmitButton.disabled = false;
@@ -43,8 +43,6 @@ const onResetButtonClick = () => {
   resetMap();
 };
 
-formResetButton.addEventListener('click', onResetButtonClick);
-
 const setOnFormSubmit = (callback) => {
   form.addEventListener('submit', async (evt) => {
     evt.preventDefault();
@@ -57,5 +55,7 @@ const setOnFormSubmit = (callback) => {
     }
   });
 };
+
+formResetButton.addEventListener('click', onResetButtonClick);
 
 export { resetForm, resetSubmitButton, setOnFormSubmit };

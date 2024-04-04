@@ -7,7 +7,7 @@ const MAX_PRICE = 100000;
 
 const PRICE = /\d/;
 
-const CAPACITY_MESSAGE = {
+const CapacityMessage = {
   roomsForms: [
     'комната',
     'комнаты',
@@ -28,7 +28,6 @@ const PriceByPropertyType = {
   palace: 10000
 };
 
-
 const form = document.querySelector('.ad-form');
 const titleField = form.querySelector('#title');
 const adPrice = form.querySelector('#price');
@@ -38,13 +37,13 @@ const adCapacity = form.querySelector('#capacity');
 const adTimeOut = form.querySelector('#timeout');
 const adTimeIn = form.querySelector('#timein');
 
-let minPrice = PriceByPropertyType[houseType.value];
-
 const ErrorText = {
-  INVALID_TYTLE: `Заголовок объявления должен быть от ${ MIN_TITLE_LENGTH } до ${ MAX_TITLE_LENGTH } символов`,
-  INVALID_PRICE: 'Цена за ночь - это числовое поле',
-  INVALID_TIME: 'Время заезда равно времени выезда'
+  TYTLE: `Заголовок объявления должен быть от ${ MIN_TITLE_LENGTH } до ${ MAX_TITLE_LENGTH } символов`,
+  PRICE: 'Цена за ночь - это числовое поле',
+  TIME: 'Время заезда равно времени выезда'
 };
+
+let minPrice = PriceByPropertyType[houseType.value];
 
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',
@@ -64,11 +63,11 @@ changeField(adTimeIn, adTimeOut);
 changeField(adTimeOut, adTimeIn);
 
 // валидация заголовока объявления
-const validateAdTitle = (title) =>
+const validateTitle = (title) =>
   title.length >= MIN_TITLE_LENGTH && title.length <= MAX_TITLE_LENGTH;
 
 // валидация цены за ночь
-const validateAdPrice = (priceField) => PRICE.test(+priceField);
+const validatePrice = (priceField) => PRICE.test(+priceField);
 
 //Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
 const updateMinPrice = (propertyType) => {
@@ -79,45 +78,45 @@ const updateMinPrice = (propertyType) => {
   updateSlider(minPrice);
 };
 
-const validateAdPriceAmount = (priceField) =>
+const validatePriceAmount = (priceField) =>
   (priceField <= MAX_PRICE && priceField >= minPrice);
 
 const getErrorMessageAdPrice = () =>
   `Цена за ночь не должна привышать ${ MAX_PRICE } руб. и быть не менее ${ minPrice } руб.`;
 
 // Поле «Количество комнат» синхронизировано с полем «Количество мест»
-const validateAdRooms = (value) => {
-  const capacity = Number(adCapacity.value);
-  const rooms = Number(value);
+const validateRooms = (value) => {
+  const capacityValue = Number(adCapacity.value);
+  const roomsValue = Number(value);
 
-  if (rooms !== 100 && rooms >= capacity && capacity !== 0) {
+  if (roomsValue !== 100 && roomsValue >= capacityValue && capacityValue !== 0) {
     return true;
   }
-  if (rooms === 100 && capacity === 0) {
+  if (roomsValue === 100 && capacityValue === 0) {
     return true;
   }
   return false;
 };
 
 const getErrorCapacityMessage = () => {
-  const rooms = Number(adRoomNumber.value);
-  const capacity = Number(adCapacity.value);
+  const roomsNumber = Number(adRoomNumber.value);
+  const capacityNumber = Number(adCapacity.value);
   let errorCapacityMessage = '';
 
-  if (rooms === 1 && capacity !== 1) {
-    errorCapacityMessage = `${ rooms } ${pluralize(CAPACITY_MESSAGE.roomsForms, rooms)}
-    для ${ rooms } ${pluralize(CAPACITY_MESSAGE.guestsForms, rooms)}`;
+  if (roomsNumber === 1 && capacityNumber !== 1) {
+    errorCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)}
+    для ${ roomsNumber } ${pluralize(CapacityMessage.guestsForms, roomsNumber)}`;
   }
-  if (rooms === 2 && (capacity > 2 || capacity === 0)) {
-    errorCapacityMessage = `${ rooms } ${pluralize(CAPACITY_MESSAGE.roomsForms, rooms)}
-    для 1 или ${ rooms } ${pluralize(CAPACITY_MESSAGE.guestsForms, rooms)}`;
+  if (roomsNumber === 2 && (capacityNumber > 2 || capacityNumber === 0)) {
+    errorCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)}
+    для 1 или ${ roomsNumber } ${pluralize(CapacityMessage.guestsForms, roomsNumber)}`;
   }
-  if (rooms === 3 && capacity === 0) {
-    errorCapacityMessage = `${ rooms } ${pluralize(CAPACITY_MESSAGE.roomsForms, rooms)}
-    для 1, 2 или ${ rooms } ${pluralize(CAPACITY_MESSAGE.guestsForms, rooms)}`;
+  if (roomsNumber === 3 && capacityNumber === 0) {
+    errorCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)}
+    для 1, 2 или ${ roomsNumber } ${pluralize(CapacityMessage.guestsForms, roomsNumber)}`;
   }
-  if (rooms === 100 && capacity !== 0) {
-    errorCapacityMessage = `${ rooms } ${pluralize(CAPACITY_MESSAGE.roomsForms, rooms)} не для гостей`;
+  if (roomsNumber === 100 && capacityNumber !== 0) {
+    errorCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)} не для гостей`;
   }
   return errorCapacityMessage;
 };
@@ -125,20 +124,20 @@ const getErrorCapacityMessage = () => {
 // время на выезд должно быть равно времени на вьезд.
 const validateTime = () => (adTimeOut.value === adTimeIn.value);
 
-adCapacity.addEventListener('change', () => pristine.validate(adRoomNumber));
-
+// при изменении поля с типом жилья
 const onHouseTypeChange = () => {
   updateMinPrice(houseType.value);
   pristine.validate(adPrice);
 };
 
-houseType.addEventListener('change', onHouseTypeChange);
+pristine.addValidator(titleField, validateTitle, ErrorText.TYTLE, true);
+pristine.addValidator(adPrice, validatePrice, ErrorText.PRICE, true);
+pristine.addValidator(adPrice, validatePriceAmount, getErrorMessageAdPrice, true);
+pristine.addValidator(adRoomNumber, validateRooms, getErrorCapacityMessage, true);
+pristine.addValidator(adTimeIn, validateTime, ErrorText.TIME, true);
+pristine.addValidator(adTimeOut, validateTime, ErrorText.TIME, true);
 
-pristine.addValidator(titleField, validateAdTitle, ErrorText.INVALID_TYTLE, true);
-pristine.addValidator(adPrice, validateAdPrice, ErrorText.INVALID_PRICE, true);
-pristine.addValidator(adPrice, validateAdPriceAmount, getErrorMessageAdPrice, true);
-pristine.addValidator(adRoomNumber, validateAdRooms, getErrorCapacityMessage, true);
-pristine.addValidator(adTimeIn, validateTime, ErrorText.INVALID_TIME, true);
-pristine.addValidator(adTimeOut, validateTime, ErrorText.INVALID_TIME, true);
+adCapacity.addEventListener('change', () => pristine.validate(adRoomNumber));
+houseType.addEventListener('change', onHouseTypeChange);
 
 export { pristine };

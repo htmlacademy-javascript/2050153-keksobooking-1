@@ -36,13 +36,9 @@ const createSlider = () => {
     start: formFieldPrice.value,
     connect: 'lower',
     format: {
-      to: function (value) {
-        return value.toFixed(0);
-      },
-      from: function (value) {
-        return Math.round(value);
-      },
-    },
+      to: (value) => Math.round(value),
+      from: (value) => value,
+    }
   });
   sliderElement.noUiSlider.on('slide', onSliderUpdate);
 };
@@ -55,10 +51,6 @@ const resetSlider = () => {
   formFieldPrice.placeholder = DEFAULT_PRICE_VALUE;
   updateSlider(Number(formFieldPrice.placeholder));
 };
-
-formFieldPrice.addEventListener('input', (evt) => {
-  sliderElement.noUiSlider.set(evt.target.value);
-});
 
 // поля с загрузками фотографий
 // проверка файла с фотографией для загрузки
@@ -98,8 +90,8 @@ const onImgUploadChange = (imgInput, imgDropZone, imgPreview) => {
   imgInput.addEventListener('change', (evt) => {
     evt.preventDefault();
 
-    const file = imgInput.files;
-    addNewImgPreview(file, imgInput, imgDropZone, imgPreview);
+    const loadedFiles = imgInput.files;
+    addNewImgPreview(loadedFiles, imgInput, imgDropZone, imgPreview);
   });
   // при перетаскивании файла с фотографией
   imgDropZone.addEventListener('dragover', (evt) => {
@@ -135,5 +127,9 @@ const previewImgAdPhoto = () => onImgUploadChange(formFieldImgInput, formFieldIm
 
 previewImgAvatar();
 previewImgAdPhoto();
+
+formFieldPrice.addEventListener('input', (evt) => {
+  sliderElement.noUiSlider.set(evt.target.value);
+});
 
 export { updateAddressField, createSlider, updateSlider, resetSlider, removePreviewImg };
