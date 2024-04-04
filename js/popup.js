@@ -3,7 +3,7 @@ import { addPostedMarker, clearMarkers } from './map.js';
 
 const MAX_OFFER_COUNT = 10;
 
-const CAPACITY_MESSAGE = {
+const CapacityMessage = {
   roomsForms: [
     'комната',
     'комнаты',
@@ -17,11 +17,11 @@ const CAPACITY_MESSAGE = {
 };
 
 const OfferNameByType = {
-  'palace': 'Дворец',
-  'flat': 'Квартира',
-  'house': 'Дом',
-  'bungalow': 'Бунгало',
-  'hotel': 'Отель',
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalow: 'Бунгало',
+  hotel: 'Отель',
 };
 
 // находим template '#card'
@@ -34,15 +34,15 @@ const cardContainer = document.querySelector('#map-canvas');
 
 // выведение сообщение по количеству комнат и гостей
 const getCapacityMessage = (roomsNumber, guestsNumber) => {
-  let CapacityMessage = '';
+  let roomCapacityMessage = '';
   if (guestsNumber === 0) {
-    CapacityMessage = `${ roomsNumber } ${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)}
+    roomCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)}
      не для гостей`;
   } else {
-    CapacityMessage = `${ roomsNumber } ${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)} для
-    ${ guestsNumber } ${pluralize(CAPACITY_MESSAGE.guestsForms, guestsNumber)}`;
+    roomCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)} для
+    ${ guestsNumber } ${pluralize(CapacityMessage.guestsForms, guestsNumber)}`;
   }
-  return CapacityMessage;
+  return roomCapacityMessage;
 };
 
 // фильтруем нужные элементы в характиристиках съемного жилья
@@ -86,7 +86,6 @@ const addPhotosToContainer = (photos, photoContainer, photosContainer) => {
   }
 };
 
-
 // создание клонированого предложения(карточки) по шаблону
 const createCard = ({ author, offer, location }) => {
   const card = cardTemplate.cloneNode(true);
@@ -100,19 +99,19 @@ const createCard = ({ author, offer, location }) => {
   checkCard(card, offer.checkin, '.popup__text--time', 'textContent', `Заезд после ${ offer.checkin }, выезд до ${ offer.checkout }`);
   checkCard(card, offer.description, '.popup__description', 'textContent');
 
-  const cardFeatures = card.querySelector('.popup__features');
-  const featuresList = cardFeatures.querySelectorAll('.popup__feature');
+  const featuresListElement = card.querySelector('.popup__features');
+  const featuresList = featuresListElement.querySelectorAll('.popup__feature');
 
   if (typeof offer.features === 'undefined') {
-    cardFeatures.style.display = 'none';
+    featuresListElement.style.display = 'none';
   } else {
     filterFeatures(offer.features, featuresList);
   }
 
-  const cardPhotos = card.querySelector('.popup__photos');
+  const cardPhotosListElement = card.querySelector('.popup__photos');
   const cardPhoto = card.querySelector('.popup__photo');
 
-  addPhotosToContainer(offer.photos, cardPhoto, cardPhotos);
+  addPhotosToContainer(offer.photos, cardPhoto, cardPhotosListElement);
 
   addPostedMarker(location, card);
   return card;
@@ -124,15 +123,10 @@ const resetCard = () => {
   clearMarkers();
 };
 
-// добавление клонированного предложения в контейнер "#map-canvas", временно
+// добавление предложений
 const renderCards = (offers) => {
   resetCard();
-  const fragment = document.createDocumentFragment();
-
-  offers.slice(0, MAX_OFFER_COUNT).forEach((offer) => {
-    const popupCard = createCard(offer);
-    fragment.append(popupCard);
-  });
+  offers.slice(0, MAX_OFFER_COUNT).forEach(createCard);
 };
 
 export { renderCards };

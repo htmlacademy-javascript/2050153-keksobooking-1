@@ -1,45 +1,61 @@
-import { createSlider } from './form-fields.js';
+import { pristine } from './validate-form-fields.js';
+import { resetMap } from './map.js';
+import { resetSlider, removePreviewImg } from './form-fields.js';
+import { resetFilters } from './map-filters.js';
 
 const form = document.querySelector('.ad-form');
-const formElements = form.querySelectorAll('.ad-form__element');
-// const adPrice = form.querySelector('#price');
+const formSubmitButton = form.querySelector('.ad-form__submit');
+const formResetButton = form.querySelector('.ad-form__reset');
+const imgPreviewField = form.querySelector('.ad-form__photo');
+const avatarImgPreviewField = form.querySelector('.ad-form-header__preview');
 
-const map = document.querySelector('.map');
-const mapFilter = map.querySelector('.map__filters');
-const mapFilterElements = mapFilter.querySelectorAll('.map__filter');
-
-function disableForm () {
-  form.classList.add('ad-form--disabled');
-  formElements.forEach((formElement)=> {
-    formElement.setAttribute('disabled', 'disabled');
-  });
-}
-
-function disableFilters () {
-  mapFilter.classList.add('map__filters--disabled');
-  mapFilterElements.forEach((filter)=> {
-    filter.setAttribute('disabled', 'disabled');
-  });
-}
-
-function activateForm () {
-  form.classList.remove('ad-form--disabled');
-  formElements.forEach((formElement)=> {
-    formElement.removeAttribute('disabled');
-  });
-  createSlider();
-}
-
-function activateFilters () {
-  mapFilter.classList.remove('map__filters--disabled');
-  mapFilterElements.forEach((filter)=> {
-    filter.removeAttribute('disabled');
-  });
-}
-
-export {
-  disableForm,
-  disableFilters,
-  activateForm,
-  activateFilters
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
 };
+
+const resetSubmitButton = () => {
+  formSubmitButton.textContent = SubmitButtonText.IDLE;
+};
+
+const blockSubmitButton = () => {
+  formSubmitButton.disabled = true;
+  resetSubmitButton();
+};
+
+const unblockSubmitButton = () => {
+  formSubmitButton.disabled = false;
+  formSubmitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const resetForm = () => {
+  pristine.reset();
+  form.reset();
+  resetSlider();
+  resetSubmitButton();
+  removePreviewImg(avatarImgPreviewField);
+  removePreviewImg(imgPreviewField);
+};
+
+const onResetButtonClick = () => {
+  resetForm();
+  resetFilters();
+  resetMap();
+};
+
+const setOnFormSubmit = (callback) => {
+  form.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      blockSubmitButton();
+      await callback(new FormData(form));
+      unblockSubmitButton();
+    }
+  });
+};
+
+formResetButton.addEventListener('click', onResetButtonClick);
+
+export { resetForm, resetSubmitButton, setOnFormSubmit };

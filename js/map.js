@@ -1,4 +1,4 @@
-import { activateForm } from './form.js';
+import { activateForm } from './activation.js';
 import { updateAddressField } from './form-fields.js';
 
 const TILE_LAYER = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -35,6 +35,7 @@ const startCoordinate = {
 let newCoordinate = startCoordinate;
 let map;
 let offerMarkers = [];
+let mainMarker;
 
 const addPinIcon = (icon) => {
   const pinIcon = L.icon({
@@ -45,12 +46,12 @@ const addPinIcon = (icon) => {
   return pinIcon;
 };
 
-const fixedNumberPrecision = (obj) => {
-  const values = Object.values(obj);
+const getValuePrecision = (obj) => {
+  const valuesObj = Object.values(obj);
   const result = [];
-  values.forEach((value) => {
-    const fixedValue = Number((value).toFixed(LOCATION_PRECISION));
-    result.push(fixedValue);
+  valuesObj.forEach((value) => {
+    const preciseValue = Number((value).toFixed(LOCATION_PRECISION));
+    result.push(preciseValue);
   });
   obj.lat = result[0];
   obj.lng = result[1];
@@ -77,20 +78,23 @@ const clearMarkers = () => {
 
 const resetMap = () => {
   map.setView(startCoordinate, ZOOM);
+  updateAddressField(startCoordinate);
+  mainMarker.setLatLng(startCoordinate);
 };
 
 const initMap = () => {
   map = L.map('map-canvas').setView(cityCenter, ZOOM);
   activateForm();
+  updateAddressField(startCoordinate);
   // main marker
-  L.marker(startCoordinate, {
+  mainMarker = L.marker(startCoordinate, {
     draggable: true,
     autoPan: true,
     icon: addPinIcon(mainIconConfig),
   })
     .on('moveend', (evt) => {
       if (evt.target.getLatLng() !== startCoordinate) {
-        newCoordinate = fixedNumberPrecision(evt.target.getLatLng());
+        newCoordinate = getValuePrecision(evt.target.getLatLng());
         updateAddressField(newCoordinate);
       }
     })

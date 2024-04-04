@@ -1,18 +1,18 @@
 import { showAlertMessage } from './util.js';
 
 const MAX_PRICE = 100000;
+const DEFAULT_PRICE_VALUE = 5000;
 
 const form = document.querySelector('.ad-form');
 const formFieldAddress = form.querySelector('#address');
-const adPrice = form.querySelector('#price');
+const formFieldPrice = form.querySelector('#price');
 const sliderElement = form.querySelector('.ad-form__slider');
 const formFieldAvatarInput = form.querySelector('.ad-form-header__input');
 const formFieldAvatarDropZone = form.querySelector('.ad-form__field');
 const avatarImgPreviewField = form.querySelector('.ad-form-header__preview');
-const adPhotoDropZone = form.querySelector('.ad-form__upload');
-const adPhotoInput = form.querySelector('.ad-form__input');
-const adPhotoPreviewField = form.querySelector('.ad-form__photo');
-
+const formFieldImgDropZone = form.querySelector('.ad-form__upload');
+const formFieldImgInput = form.querySelector('.ad-form__input');
+const imgPreviewField = form.querySelector('.ad-form__photo');
 
 // поле адреса
 const updateAddressField = (coordinateObj) => {
@@ -22,57 +22,54 @@ const updateAddressField = (coordinateObj) => {
 
 // поле цены
 // реализация слайдера для цены, используем noUiSlider
-adPrice.value = adPrice.placeholder;
-
 const onSliderUpdate = () => {
-  adPrice.value = sliderElement.noUiSlider.get();
+  formFieldPrice.value = sliderElement.noUiSlider.get();
 };
 
 const createSlider = () => {
   noUiSlider.create(sliderElement, {
     range: {
-      min: Number(adPrice.placeholder),
+      min: Number(formFieldPrice.placeholder),
       max: MAX_PRICE
     },
     step: 1,
-    start: adPrice.value,
+    start: formFieldPrice.value,
     connect: 'lower',
     format: {
-      to: function (value) {
-        return value.toFixed(0);
-      },
-      from: function (value) {
-        return Math.round(value);
-      },
-    },
+      to: (value) => Math.round(value),
+      from: (value) => value,
+    }
   });
   sliderElement.noUiSlider.on('slide', onSliderUpdate);
 };
 
 const updateSlider = (newMinValue) => {
-  sliderElement.noUiSlider.updateOptions({range:{min: newMinValue, max: MAX_PRICE}, start: adPrice.value});
+  sliderElement.noUiSlider.updateOptions({range:{min: newMinValue, max: MAX_PRICE}, start: formFieldPrice.value});
 };
 
-adPrice.addEventListener('input', (evt) => {
-  sliderElement.noUiSlider.set(evt.target.value);
-});
+const resetSlider = () => {
+  formFieldPrice.placeholder = DEFAULT_PRICE_VALUE;
+  updateSlider(Number(formFieldPrice.placeholder));
+};
 
+// поля с загрузками фотографий
 // проверка файла с фотографией для загрузки
 const validateFile = (file, dropZone) => {
   const allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
   const fileExtension = file.type.split('/')[1];
   const isValidFile = allowedExtensions.includes(fileExtension);
   if (!isValidFile) {
-    // throw new Error(`Подходящий формат файла: *.${ allowedExtensions.join(', *.')}`);
     showAlertMessage(`Подходящий формат Фотографии: *.${ allowedExtensions.join(', *.')}`, dropZone);
   }
   return isValidFile;
 };
 
+// добавление изображения в поле предпросмотра
 const addNewImgPreview = (file, imgInput, imgDropZone, imgPreview) => {
   if (validateFile(file[0], imgDropZone)) {
     const newImg = document.createElement('img');
     newImg.src = URL.createObjectURL(file[0]);
+    newImg.setAttribute('id', 'selected-img');
     if (imgInput.id === 'avatar') {
       newImg.width = '40';
       newImg.maxHeight = '40';
@@ -80,18 +77,21 @@ const addNewImgPreview = (file, imgInput, imgDropZone, imgPreview) => {
       newImg.maxWidth = '70';
       newImg.height = '70';
     }
-    imgPreview.innerHTML = '';
+    for (const child of imgPreview.children) {
+      child.classList.add('visually-hidden');
+    }
     imgPreview.append(newImg);
   }
 };
 
-const onImgUpploadChange = (imgInput, imgDropZone, imgPreview) => {
+// реализация предпросмотра фотографии при изменении поля для загрузки
+const onImgUploadChange = (imgInput, imgDropZone, imgPreview) => {
   // при нажатии на загрузку
   imgInput.addEventListener('change', (evt) => {
     evt.preventDefault();
 
-    const file = imgInput.files;
-    addNewImgPreview(file, imgInput, imgDropZone, imgPreview);
+    const loadedFiles = imgInput.files;
+    addNewImgPreview(loadedFiles, imgInput, imgDropZone, imgPreview);
   });
   // при перетаскивании файла с фотографией
   imgDropZone.addEventListener('dragover', (evt) => {
@@ -109,11 +109,27 @@ const onImgUpploadChange = (imgInput, imgDropZone, imgPreview) => {
   });
 };
 
-const previewImgAvatar = () => onImgUpploadChange(formFieldAvatarInput, formFieldAvatarDropZone, avatarImgPreviewField);
+// удаление загруженной фотографии из предпросмотра
+const removePreviewImg = (imgPreview) => {
+  const selectedImg = document.querySelector('#selected-img');
+  if (imgPreview.contains(selectedImg)) {
+    selectedImg.remove();
+    if (imgPreview === avatarImgPreviewField) {
+      imgPreview.querySelector('.visually-hidden').classList.remove('visually-hidden');
+    }
+  }
+};
 
-const previewImgAdPhoto = () => onImgUpploadChange(adPhotoInput, adPhotoDropZone, adPhotoPreviewField);
+// предпросмотр фотографии в зависимости от поля загрузки
+const previewImgAvatar = () => onImgUploadChange(formFieldAvatarInput, formFieldAvatarDropZone, avatarImgPreviewField);
+
+const previewImgAdPhoto = () => onImgUploadChange(formFieldImgInput, formFieldImgDropZone, imgPreviewField);
 
 previewImgAvatar();
 previewImgAdPhoto();
 
-export { updateAddressField, createSlider, updateSlider };
+formFieldPrice.addEventListener('input', (evt) => {
+  sliderElement.noUiSlider.set(evt.target.value);
+});
+
+export { updateAddressField, createSlider, updateSlider, resetSlider, removePreviewImg };

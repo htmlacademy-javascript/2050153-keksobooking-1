@@ -12,9 +12,9 @@ const FilterByName = {
 };
 
 const FilterPriceRangeValue = {
-  'low': [0, 10000],
-  'middle': [10000, 50000],
-  'high': [50000, 100000]
+  low: [0, 10000],
+  middle: [10000, 50000],
+  high: [50000, 100000]
 };
 
 const filtersForm = document.querySelector('.map__filters');
@@ -54,11 +54,11 @@ const renderCardsDebounced = debounce(renderCards);
 // функция срабатываемая при нажатия на кнопки с фильрами
 const setOnChangeFilters = (offers) => {
   // получаем значения из фильтров
-  const changedFilters = new FormData(filtersForm);
+  const filtersData = new FormData(filtersForm);
   // получаем значения из предложений
   let filteredOffers = [...offers];
   // фильтрация по имени и значению фильтра
-  for (const entry of changedFilters.entries()) {
+  for (const entry of filtersData.entries()) {
     const [ filterName, filterValue ] = entry;
     if (isActive(filterValue)) {
       filteredOffers = filteredOffers.filter(getFilterByName(filterName, filterValue));
@@ -68,9 +68,14 @@ const setOnChangeFilters = (offers) => {
   renderCardsDebounced(filteredOffers);
 };
 
+const resetFilters = () => {
+  filtersForm.reset();
+};
+
 // функция инициализации фильтров для загружаемых предложений
 const initializeOfferFilters = (offers) => {
   filtersForm.addEventListener('change', () => setOnChangeFilters(offers));
+  filtersForm.addEventListener('reset', () => renderCards(offers));
 };
 
-export { initializeOfferFilters };
+export { initializeOfferFilters, resetFilters };

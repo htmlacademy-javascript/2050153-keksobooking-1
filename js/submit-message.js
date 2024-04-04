@@ -1,6 +1,5 @@
 import { isEscapeKey } from './util.js';
-import { resetButton } from './validate-form.js';
-// import { resetMap } from './map.js';
+import { resetSubmitButton } from './form.js';
 
 // находим template '#error'
 const errorMessage = document.querySelector('#error')
@@ -37,8 +36,11 @@ function closeMessage() {
   messageElement.remove();
   document.removeEventListener('keydown', onDocumentKeydown);
   body.removeEventListener('click', onBodyClick);
-  resetButton();
+  resetSubmitButton();
 }
+
+// закрытие сообщения при клике
+const onMessageClose = () => closeMessage();
 
 // функция показа сообщения
 const showMessage = (messageElement) => {
@@ -48,7 +50,7 @@ const showMessage = (messageElement) => {
   if (messageElement === errorMessage) {
     messageElement
       .querySelector('.error__button')
-      .addEventListener('click', closeMessage);
+      .addEventListener('click', onMessageClose);
   }
 };
 
