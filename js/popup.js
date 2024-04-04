@@ -3,7 +3,7 @@ import { addPostedMarker, clearMarkers } from './map.js';
 
 const MAX_OFFER_COUNT = 10;
 
-const CAPACITY_MESSAGE = {
+const CapacityMessage = {
   roomsForms: [
     'комната',
     'комнаты',
@@ -34,15 +34,15 @@ const cardContainer = document.querySelector('#map-canvas');
 
 // выведение сообщение по количеству комнат и гостей
 const getCapacityMessage = (roomsNumber, guestsNumber) => {
-  let CapacityMessage = '';
+  let roomCapacityMessage = '';
   if (guestsNumber === 0) {
-    CapacityMessage = `${ roomsNumber } ${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)}
+    roomCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)}
      не для гостей`;
   } else {
-    CapacityMessage = `${ roomsNumber } ${pluralize(CAPACITY_MESSAGE.roomsForms, roomsNumber)} для
-    ${ guestsNumber } ${pluralize(CAPACITY_MESSAGE.guestsForms, guestsNumber)}`;
+    roomCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)} для
+    ${ guestsNumber } ${pluralize(CapacityMessage.guestsForms, guestsNumber)}`;
   }
-  return CapacityMessage;
+  return roomCapacityMessage;
 };
 
 // фильтруем нужные элементы в характиристиках съемного жилья
