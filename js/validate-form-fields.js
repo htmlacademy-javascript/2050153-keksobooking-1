@@ -38,7 +38,7 @@ const adTimeOut = form.querySelector('#timeout');
 const adTimeIn = form.querySelector('#timein');
 
 const ErrorText = {
-  TYTLE: `Заголовок объявления должен быть от ${ MIN_TITLE_LENGTH } до ${ MAX_TITLE_LENGTH } символов`,
+  TITLE: `Заголовок объявления должен быть от ${ MIN_TITLE_LENGTH } до ${ MAX_TITLE_LENGTH } символов`,
   PRICE: 'Цена за ночь - это числовое поле',
   TIME: 'Время заезда равно времени выезда'
 };
@@ -130,7 +130,7 @@ const onHouseTypeChange = () => {
   pristine.validate(adPrice);
 };
 
-pristine.addValidator(titleField, validateTitle, ErrorText.TYTLE, true);
+pristine.addValidator(titleField, validateTitle, ErrorText.TITLE, true);
 pristine.addValidator(adPrice, validatePrice, ErrorText.PRICE, true);
 pristine.addValidator(adPrice, validatePriceAmount, getErrorMessageAdPrice, true);
 pristine.addValidator(adRoomNumber, validateRooms, getErrorCapacityMessage, true);
