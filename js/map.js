@@ -78,12 +78,14 @@ const clearMarkers = () => {
 
 const resetMap = () => {
   map.setView(startCoordinate, ZOOM);
+  updateAddressField(startCoordinate);
   mainMarker.setLatLng(startCoordinate);
 };
 
 const initMap = () => {
   map = L.map('map-canvas').setView(cityCenter, ZOOM);
   activateForm();
+  updateAddressField(startCoordinate);
   // main marker
   mainMarker = L.marker(startCoordinate, {
     draggable: true,

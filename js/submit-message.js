@@ -1,5 +1,5 @@
 import { isEscapeKey } from './util.js';
-import { resetButton } from './form.js';
+import { resetSubmitButton } from './form.js';
 
 // находим template '#error'
 const errorMessage = document.querySelector('#error')
@@ -36,7 +36,7 @@ function closeMessage() {
   messageElement.remove();
   document.removeEventListener('keydown', onDocumentKeydown);
   body.removeEventListener('click', onBodyClick);
-  resetButton();
+  resetSubmitButton();
 }
 
 // функция показа сообщения

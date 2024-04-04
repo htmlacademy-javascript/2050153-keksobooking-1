@@ -1,6 +1,7 @@
 import { showAlertMessage } from './util.js';
 
 const MAX_PRICE = 100000;
+const DEFAULT_PRICE_VALUE = 5000;
 
 const form = document.querySelector('.ad-form');
 const formFieldAddress = form.querySelector('#address');
@@ -12,8 +13,6 @@ const avatarImgPreviewField = form.querySelector('.ad-form-header__preview');
 const formFieldImgDropZone = form.querySelector('.ad-form__upload');
 const formFieldImgInput = form.querySelector('.ad-form__input');
 const imgPreviewField = form.querySelector('.ad-form__photo');
-
-formFieldPrice.value = formFieldPrice.placeholder;
 
 // поле адреса
 const updateAddressField = (coordinateObj) => {
@@ -50,6 +49,11 @@ const createSlider = () => {
 
 const updateSlider = (newMinValue) => {
   sliderElement.noUiSlider.updateOptions({range:{min: newMinValue, max: MAX_PRICE}, start: formFieldPrice.value});
+};
+
+const resetSlider = () => {
+  formFieldPrice.placeholder = DEFAULT_PRICE_VALUE;
+  updateSlider(Number(formFieldPrice.placeholder));
 };
 
 formFieldPrice.addEventListener('input', (evt) => {
@@ -132,4 +136,4 @@ const previewImgAdPhoto = () => onImgUploadChange(formFieldImgInput, formFieldIm
 previewImgAvatar();
 previewImgAdPhoto();
 
-export { updateAddressField, createSlider, updateSlider, removePreviewImg };
+export { updateAddressField, createSlider, updateSlider, resetSlider, removePreviewImg };

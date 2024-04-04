@@ -30,7 +30,7 @@ const PriceByPropertyType = {
 
 
 const form = document.querySelector('.ad-form');
-const adTitle = form.querySelector('#title');
+const titleField = form.querySelector('#title');
 const adPrice = form.querySelector('#price');
 const houseType = form.querySelector('#type');
 const adRoomNumber = form.querySelector('#room_number');
@@ -49,6 +49,7 @@ const ErrorText = {
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',
   errorTextParent: 'ad-form__element',
+  errorClass: 'ad-form__element--invalid',
   errorTextClass: 'ad-form__element--invalid',
 });
 
@@ -133,7 +134,7 @@ const onHouseTypeChange = () => {
 
 houseType.addEventListener('change', onHouseTypeChange);
 
-pristine.addValidator(adTitle, validateAdTitle, ErrorText.INVALID_TYTLE, true);
+pristine.addValidator(titleField, validateAdTitle, ErrorText.INVALID_TYTLE, true);
 pristine.addValidator(adPrice, validateAdPrice, ErrorText.INVALID_PRICE, true);
 pristine.addValidator(adPrice, validateAdPriceAmount, getErrorMessageAdPrice, true);
 pristine.addValidator(adRoomNumber, validateAdRooms, getErrorCapacityMessage, true);

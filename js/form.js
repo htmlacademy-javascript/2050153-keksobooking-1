@@ -1,10 +1,9 @@
 import { pristine } from './validate-form-fields.js';
 import { resetMap } from './map.js';
-import { updateSlider, removePreviewImg } from './form-fields.js';
+import { resetSlider, removePreviewImg } from './form-fields.js';
 import { resetFilters } from './map-filters.js';
 
 const form = document.querySelector('.ad-form');
-const formFieldPrice = form.querySelector('#price');
 const formSubmitButton = form.querySelector('.ad-form__submit');
 const formResetButton = form.querySelector('.ad-form__reset');
 const imgPreviewField = form.querySelector('.ad-form__photo');
@@ -15,15 +14,13 @@ const SubmitButtonText = {
   SENDING: 'Публикую...'
 };
 
-const minPriceValue = Number(formFieldPrice.placeholder);
-
-const resetButton = () => {
+const resetSubmitButton = () => {
   formSubmitButton.textContent = SubmitButtonText.IDLE;
 };
 
 function blockSubmitButton() {
   formSubmitButton.disabled = true;
-  resetButton();
+  resetSubmitButton();
 }
 
 const unblockSubmitButton = () => {
@@ -34,16 +31,16 @@ const unblockSubmitButton = () => {
 const resetForm = () => {
   pristine.reset();
   form.reset();
-  updateSlider(minPriceValue);
-  resetButton();
+  resetSlider();
+  resetSubmitButton();
   removePreviewImg(avatarImgPreviewField);
   removePreviewImg(imgPreviewField);
 };
 
 const onResetButtonClick = () => {
   resetForm();
-  resetMap();
   resetFilters();
+  resetMap();
 };
 
 formResetButton.addEventListener('click', onResetButtonClick);
@@ -61,4 +58,4 @@ const setOnFormSubmit = (callback) => {
   });
 };
 
-export { resetForm, resetButton, setOnFormSubmit };
+export { resetForm, resetSubmitButton, setOnFormSubmit };
