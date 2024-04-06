@@ -23,10 +23,10 @@ setOnFormSubmit (async (data) => {
 
 disableFilters();
 disableForm();
-initMap();
 
 try {
   const data = await getData();
+  initMap();
   renderCards(data);
   activateFilters();
   initializeOfferFilters(data);

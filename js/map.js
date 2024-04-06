@@ -48,13 +48,13 @@ const addPinIcon = (icon) => {
 
 const getValuePrecision = (obj) => {
   const valuesObj = Object.values(obj);
-  const result = [];
+  const results = [];
   valuesObj.forEach((value) => {
     const preciseValue = Number((value).toFixed(LOCATION_PRECISION));
-    result.push(preciseValue);
+    results.push(preciseValue);
   });
-  obj.lat = result[0];
-  obj.lng = result[1];
+  obj.lat = results[0];
+  obj.lng = results[1];
   return obj;
 };
 

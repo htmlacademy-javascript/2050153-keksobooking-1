@@ -4,12 +4,12 @@ import { addPostedMarker, clearMarkers } from './map.js';
 const MAX_OFFER_COUNT = 10;
 
 const CapacityMessage = {
-  roomsForms: [
+  ROOMS_FORMS: [
     'комната',
     'комнаты',
     'комнат'
   ],
-  guestsForms: [
+  GUESTS_FORMS: [
     'гостя',
     'гостей',
     'гостей'
@@ -36,11 +36,11 @@ const cardContainer = document.querySelector('#map-canvas');
 const getCapacityMessage = (roomsNumber, guestsNumber) => {
   let roomCapacityMessage = '';
   if (guestsNumber === 0) {
-    roomCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)}
+    roomCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.ROOMS_FORMS, roomsNumber)}
      не для гостей`;
   } else {
-    roomCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.roomsForms, roomsNumber)} для
-    ${ guestsNumber } ${pluralize(CapacityMessage.guestsForms, guestsNumber)}`;
+    roomCapacityMessage = `${ roomsNumber } ${pluralize(CapacityMessage.ROOMS_FORMS, roomsNumber)} для
+    ${ guestsNumber } ${pluralize(CapacityMessage.GUESTS_FORMS, guestsNumber)}`;
   }
   return roomCapacityMessage;
 };
